@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 # load the data
-full_dataset = scipy.io.loadmat("EM1 Data/Second Run Data (standard mode)/2023-01-20 NBI Power 2MW.mat")
+full_dataset = scipy.io.loadmat("EM1 Data/Second Run Data (standard mode)/2023-01-20 NBI Power 2MW.mat", variable_names=['post'])
 
 
 def list_subsections():
