@@ -1,29 +1,12 @@
 import scipy.io
 
-
-mat = scipy.io.loadmat(
-    "EM1 Data/Second Run Data (standard mode)/2023-01-20 NBI Power 2MW.mat",
-    variable_names=["post"],
-)
-
-variable_name = input("Enter the name of the variable to display: ")
-if variable_name in mat:
-    print(mat[variable_name])
-else:
-    print("Variable not found in file.")
-
-
-import scipy.io
-
-filename = input("Enter the name of the .mat file: ")
+filename = "EM1 Data/Second Run Data (standard mode)/2023-01-20 NBI Power 2MW.mat" 
 mat = scipy.io.loadmat(filename)
 
-variable_path = input(
-    "Enter the path of the variable to display (e.g. 'subsection1/subsection2/variable_name'): "
-)
+variable_path = "post/zerod/te0"
 
 # Split the input string on the '/' character to get the list of keys
-keys = variable_path.split("/")
+keys = variable_path.split('/')
 
 # Use a for loop to navigate the nested dictionaries and get the value of the specified variable
 value = mat
