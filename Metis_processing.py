@@ -9,7 +9,7 @@ import os
 
 base_path = "EM1 Data/Second Run Data (standard mode)/"
 file_name_template = "2023-01-20 NBI Power {NBI_power}MW.mat"
-NBI_powers = range(2, 41, 2) # generates a list of powers from 2 to 40 in steps of 2
+NBI_powers = list(range(2, 41, 2)) # generates a list of powers from 2 to 40 in steps of 2
 
 files_paths = [os.path.join(base_path, file_name_template.format(NBI_power=power)) for power in NBI_powers]
 
@@ -37,3 +37,20 @@ for file_path in files_paths:
             f"Average for variable {variable} in {file_path} is: {avg} +/- {std} (std)"
         )
 
+# Plot the results
+fig, axs = plt.subplots(1, len(variables), figsize=(15, 5))
+
+plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
+
+fig.suptitle("Plot of the average of the variables te0, ne0, and taue, recorded from 21/10/22", fontsize=16)
+
+for i, variable in enumerate(variables):
+    axs[i].set_title(variable)
+    axs[i].set_xlabel("Power")
+    axs[i].set_ylabel(variable)
+    for file_path, power in zip(files_paths, NBI_powers):
+        results = get_average(file_path, start, end, [variable])
+        avg, std, variable = results[0]
+        axs[i].errorbar(power, avg, yerr=std, fmt='o')
+
+plt.show()
