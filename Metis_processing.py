@@ -12,11 +12,11 @@ if save_graph:
 # load the data
 
 
-base_path = "EM1 Data/Second Run Data (standard mode)/"
-file_name_template = "2023-01-20 NBI Power {NBI_power}MW.mat"
-NBI_powers = list(
+base_path = "EM1 Data/Third Run Data (fast mode)"
+file_name_template = "2023-01-25 NBI Power {NBI_power}MW.mat"
+NBI_powers =  [0, 0.25, 0.5, 0.75, 1] + list(
     range(2, 41, 2)
-)  # generates a list of powers from 2 to 40 in steps of 2
+) # generates a list of NBI powers from 2 to 40 in steps of 2
 
 files_paths = [
     os.path.join(base_path, file_name_template.format(NBI_power=power))
@@ -37,7 +37,7 @@ def get_average(file_path, start, end, variables):
     return results
 
 
-variables = ["te0", "ne0", "taue"]
+variables = ["ne0", "te0", "taue", "betap"]
 start = 50
 end = 100
 
@@ -73,7 +73,7 @@ for i, variable in enumerate(variables):
         # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
         # print(f"Plotting {variable} at {power} MW")
         axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black") 
-
+fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
 
