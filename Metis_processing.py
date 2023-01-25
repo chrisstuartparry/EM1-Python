@@ -2,7 +2,7 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from matplotlib.widgets import CheckButtons
+# from matplotlib.widgets import CheckButtons
 
 chosen_subsection = "zerod"
 save_graph = False
