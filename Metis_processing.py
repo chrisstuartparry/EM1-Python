@@ -57,7 +57,6 @@ def get_triple_product(file_path, start, end):
         (ne0_std / ne0_avg) ** 2 + (te0_std / te0_avg) ** 2 + (taue_std / taue_avg) ** 2
     )
     return ["triple_product", triple_product_avg, triple_product_std]
-    return
 
 
 variables = ["ne0", "te0", "taue", "betap"]
@@ -73,7 +72,11 @@ end = 100
 
 
 # Plot the results
-fig, axs = plt.subplots(1, len(variables) + 1, figsize=(18, 6))
+if triple_product:
+    fig, axs = plt.subplots(1, len(variables) + 1, figsize=(18, 6))
+else:
+    fig, axs = plt.subplots(1, len(variables), figsize=(18, 6))
+
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -85,25 +88,39 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 #     "Plot of the average of the variables te0, ne0, and taue, recorded on 20/10/22",
 #     fontsize=16,
 # )
-for i, variable in enumerate(variables):
-    # axs[i].set_title(variable)
-    axs[i].set_xlabel("Power (MW)")
-    axs[i].set_ylabel(variable)
-    for file_path, power in zip(files_paths, NBI_powers):
-        # print(f"Getting data for {variable} at {power} MW")
-        results = get_average(file_path, start, end, variables)
-        variable, avg, std = results[i]
-        # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-        # print(f"Plotting {variable} at {power} MW")
-        axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black")
+
 if triple_product:
     # Add a new subplot for the triple product
-    axs[len(variables)].set_xlabel("Power (MW)")
-    axs[len(variables)].set_ylabel("Triple Product")
+    axs[0].set_title("Triple Product")
+    axs[0].set_xlabel("Power (MW)")
+    axs[0].set_ylabel("nTtaue")
     for file_path, power in zip(files_paths, NBI_powers):
         results = get_triple_product(file_path, start, end)
         triple_product, avg, std = results
-        axs[len(variables)].errorbar(power, avg, yerr=std, fmt="o", color="black")
+        axs[0].errorbar(power, avg, yerr=std, fmt="o", color="black")
+    for i, variable in enumerate(variables):
+        # axs[i].set_title(variable)
+        axs[i+1].set_xlabel("Power (MW)")
+        axs[i+1].set_ylabel(variable)
+        for file_path, power in zip(files_paths, NBI_powers):
+            # print(f"Getting data for {variable} at {power} MW")
+            results = get_average(file_path, start, end, variables)
+            variable, avg, std = results[i]
+            # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
+            # print(f"Plotting {variable} at {power} MW")
+            axs[i+1].errorbar(power, avg, yerr=std, fmt="o", color="black")
+else:
+    for i, variable in enumerate(variables):
+        # axs[i].set_title(variable)
+        axs[i].set_xlabel("Power (MW)")
+        axs[i].set_ylabel(variable)
+        for file_path, power in zip(files_paths, NBI_powers):
+            # print(f"Getting data for {variable} at {power} MW")
+            results = get_average(file_path, start, end, variables)
+            variable, avg, std = results[i]
+            # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
+            # print(f"Plotting {variable} at {power} MW")
+            axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black")
 fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
