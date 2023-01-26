@@ -2,9 +2,11 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+
 # from matplotlib.widgets import CheckButtons
 
 chosen_subsection = "zerod"
+triple_product = True
 save_graph = False
 if save_graph:
     fig_file = input("Enter the name of the file to save the graph to: ")
@@ -16,13 +18,12 @@ base_path = "EM1 Data/Third Run Data (fast mode)"
 file_name_template = "2023-01-25 NBI Power {NBI_power}MW.mat"
 NBI_powers = list(
     range(2, 41, 2)
-) # generates a list of NBI powers from 2 to 40 in steps of 2
+)  # generates a list of NBI powers from 2 to 41 in steps of 2
 
 files_paths = [
     os.path.join(base_path, file_name_template.format(NBI_power=power))
     for power in NBI_powers
 ]
-
 
 
 def get_average(file_path, start, end, variables):
@@ -35,6 +36,28 @@ def get_average(file_path, start, end, variables):
         std = np.std(a[start:end])
         results.append([variable, avg, std])
     return results
+
+
+def get_triple_product(file_path, start, end):
+    full_dataset = scipy.io.loadmat(file_path)
+    ne0 = full_dataset["post"][chosen_subsection][0][0]["ne0"][0][0]
+    ne0 = [float(x[0]) for x in ne0]
+    te0 = full_dataset["post"][chosen_subsection][0][0]["te0"][0][0]
+    te0 = [float(x[0]) for x in te0]
+    taue = full_dataset["post"][chosen_subsection][0][0]["taue"][0][0]
+    taue = [float(x[0]) for x in taue]
+    ne0_avg = np.mean(ne0[start:end])
+    te0_avg = np.mean(te0[start:end])
+    taue_avg = np.mean(taue[start:end])
+    ne0_std = np.std(ne0[start:end])
+    te0_std = np.std(te0[start:end])
+    taue_std = np.std(taue[start:end])
+    triple_product_avg = ne0_avg * te0_avg * taue_avg
+    triple_product_std = triple_product_avg * np.sqrt(
+        (ne0_std / ne0_avg) ** 2 + (te0_std / te0_avg) ** 2 + (taue_std / taue_avg) ** 2
+    )
+    return ["triple_product", triple_product_avg, triple_product_std]
+    return
 
 
 variables = ["ne0", "te0", "taue", "betap"]
@@ -50,7 +73,7 @@ end = 100
 
 
 # Plot the results
-fig, axs = plt.subplots(1, len(variables), figsize=(18, 6))
+fig, axs = plt.subplots(1, len(variables) + 1, figsize=(18, 6))
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -72,7 +95,15 @@ for i, variable in enumerate(variables):
         variable, avg, std = results[i]
         # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
         # print(f"Plotting {variable} at {power} MW")
-        axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black") 
+        axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black")
+if triple_product:
+    # Add a new subplot for the triple product
+    axs[len(variables)].set_xlabel("Power (MW)")
+    axs[len(variables)].set_ylabel("Triple Product")
+    for file_path, power in zip(files_paths, NBI_powers):
+        results = get_triple_product(file_path, start, end)
+        triple_product, avg, std = results
+        axs[len(variables)].errorbar(power, avg, yerr=std, fmt="o", color="black")
 fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
