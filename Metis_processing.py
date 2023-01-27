@@ -16,7 +16,7 @@ if save_graph:
 
 base_path = "EM1 Data/Third Run Data (fast mode)"
 file_name_template = "2023-01-25 NBI Power {NBI_power}MW.mat"
-NBI_powers = list(
+NBI_powers = [0, 0.25, 0.5, 0.75, 1]+list(
     range(2, 41, 2)
 )  # generates a list of NBI powers from 2 to 41 in steps of 2
 
