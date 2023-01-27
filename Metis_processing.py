@@ -97,7 +97,7 @@ if triple_product:
     for file_path, power in zip(files_paths, NBI_powers):
         results = get_triple_product(file_path, start, end)
         triple_product, avg, std = results
-        axs[0].errorbar(power, avg, yerr=std, fmt="o", color="black", elinewidth=1, capsize=2)
+        axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
     for i, variable in enumerate(variables):
         # axs[i].set_title(variable)
         axs[i+1].set_xlabel("Power (MW)")
@@ -108,7 +108,7 @@ if triple_product:
             variable, avg, std = results[i]
             # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
             # print(f"Plotting {variable} at {power} MW")
-            axs[i+1].errorbar(power, avg, yerr=std, fmt="o", color="black", elinewidth=1, capsize=2)
+            axs[i+1].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 else:
     for i, variable in enumerate(variables):
         # axs[i].set_title(variable)
@@ -120,7 +120,7 @@ else:
             variable, avg, std = results[i]
             # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
             # print(f"Plotting {variable} at {power} MW")
-            axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black", elinewidth=1, capsize=2)
+            axs[i].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
