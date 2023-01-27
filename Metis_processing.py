@@ -16,7 +16,7 @@ if save_graph:
 
 base_path = "EM1 Data/Third Run Data (fast mode)"
 file_name_template = "2023-01-25 NBI Power {NBI_power}MW.mat"
-NBI_powers = [0, 0.25, 0.5, 0.75, 1]+list(
+NBI_powers = [0, 0.25, 0.5, 0.75, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]+list(
     range(2, 41, 2)
 )  # generates a list of NBI powers from 2 to 41 in steps of 2
 
@@ -97,7 +97,7 @@ if triple_product:
     for file_path, power in zip(files_paths, NBI_powers):
         results = get_triple_product(file_path, start, end)
         triple_product, avg, std = results
-        axs[0].errorbar(power, avg, yerr=std, fmt="o", color="black")
+        axs[0].errorbar(power, avg, yerr=std, fmt="o", color="black", elinewidth=1, capsize=2)
     for i, variable in enumerate(variables):
         # axs[i].set_title(variable)
         axs[i+1].set_xlabel("Power (MW)")
@@ -108,7 +108,7 @@ if triple_product:
             variable, avg, std = results[i]
             # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
             # print(f"Plotting {variable} at {power} MW")
-            axs[i+1].errorbar(power, avg, yerr=std, fmt="o", color="black")
+            axs[i+1].errorbar(power, avg, yerr=std, fmt="o", color="black", elinewidth=1, capsize=2)
 else:
     for i, variable in enumerate(variables):
         # axs[i].set_title(variable)
@@ -120,7 +120,7 @@ else:
             variable, avg, std = results[i]
             # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
             # print(f"Plotting {variable} at {power} MW")
-            axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black")
+            axs[i].errorbar(power, avg, yerr=std, fmt="o", color="black", elinewidth=1, capsize=2)
 fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
