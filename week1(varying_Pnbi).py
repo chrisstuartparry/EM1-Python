@@ -14,7 +14,7 @@ if save_graph:
 # load the data
 
 
-base_path = "EM1 Data/Third Run Data (fast mode)"
+base_path = "EM1 Data/3rd Run Data (fast mode)"
 file_name_template = "2023-01-25 NBI Power {NBI_power}MW.mat"
 NBI_powers = [0, 0.25, 0.5, 0.75, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9]+list(
     range(2, 41, 2)
@@ -38,26 +38,25 @@ def get_average(file_path, start, end, variables):
     return results
 
 
+
 def get_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
-    ne0 = full_dataset["post"][chosen_subsection][0][0]["ne0"][0][0]
-    ne0 = [float(x[0]) for x in ne0]
-    te0 = full_dataset["post"][chosen_subsection][0][0]["te0"][0][0]
-    te0 = [float(x[0]) for x in te0]
-    taue = full_dataset["post"][chosen_subsection][0][0]["taue"][0][0]
-    taue = [float(x[0]) for x in taue]
-    ne0_avg = np.mean(ne0[start:end])
-    te0_avg = np.mean(te0[start:end])
-    taue_avg = np.mean(taue[start:end])
-    ne0_std = np.std(ne0[start:end])
-    te0_std = np.std(te0[start:end])
-    taue_std = np.std(taue[start:end])
-    triple_product_avg = ne0_avg * te0_avg * taue_avg
+    triple_product_variables = ["ne0", "te0", "taue"]
+    results = []
+    for variable in triple_product_variables:
+        a = full_dataset["post"]["zerod"][0][0][variable][0][0]
+        a = [float(x[0]) for x in a]
+        avg = np.mean(a[start:end])
+        std = np.std(a[start:end])
+        results.append([variable, avg, std])
+    triple_product_avg = results[0][1] * results[1][1] * results[2][1]
     triple_product_std = triple_product_avg * np.sqrt(
-        (ne0_std / ne0_avg) ** 2 + (te0_std / te0_avg) ** 2 + (taue_std / taue_avg) ** 2
+        (results[0][2] / results[0][1]) ** 2
+        + (results[1][2] / results[1][1]) ** 2
+        + (results[2][2] / results[2][1]) ** 2
     )
     return ["triple_product", triple_product_avg, triple_product_std]
-
+    
 
 variables = ["ne0", "te0", "taue", "betap"]
 start = 50
