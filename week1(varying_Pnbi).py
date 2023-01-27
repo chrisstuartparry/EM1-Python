@@ -123,5 +123,4 @@ else:
 fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
-
 plt.show()

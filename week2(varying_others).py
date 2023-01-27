@@ -3,18 +3,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-def division(a, b):
-    return a / b if a % b else a // b
-print(division(5,2))
-print(division(10,2))
 
 base_path = "EM1 Data/4th Run Data (fast mode)"
 file_name_template = "2023-01-27 NBI Power 2MW B0 {B0_value}T.mat"
-B0_values = np.array(range(1,41,1), dtype=float)
-for i in range(len(B0_values)):
-    B0_values[i] = division(B0_values[i],10)
-    
-print(f"B0_values: {B0_values}")
+B0_values = np.array(range(1,41,1), dtype=float)/10
+
+files_paths = [
+    os.path.join(base_path, file_name_template.format(B0_value=value))
+    for value in B0_values
+]
+
+start = 50
+end = 100
 
 def get_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
@@ -33,3 +33,22 @@ def get_triple_product(file_path, start, end):
         + (results[2][2] / results[2][1]) ** 2
     )
     return ["triple_product", triple_product_avg, triple_product_std]
+
+
+fig, axs = plt.subplots(1, 1, figsize=(18, 6))
+plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
+plt.rcParams["text.usetex"] = True
+plt.rcParams["text.latex.preamble"] = "\n".join(
+    [
+        r"\usepackage{siunitx}",
+    ]
+)
+axs.set_title("Triple Product")
+axs.set_xlabel("Power (MW)")
+axs.set_ylabel("nTtaue")
+for file_path, power in zip(files_paths, B0_values):
+    results = get_triple_product(file_path, start, end)
+    triple_product, avg, std = results
+    axs.errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
+fig.tight_layout()
+plt.show()
