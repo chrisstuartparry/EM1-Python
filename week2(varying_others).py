@@ -35,7 +35,7 @@ def get_triple_product(file_path, start, end):
     return ["triple_product", triple_product_avg, triple_product_std]
 
 
-fig, axs = plt.subplots(1, 1, figsize=(18, 6))
+fig, axs = plt.subplots(1, 1, figsize=(10, 5))
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -44,7 +44,7 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
     ]
 )
 axs.set_title("Triple Product")
-axs.set_xlabel("Power (MW)")
+axs.set_xlabel("B0 (T)")
 axs.set_ylabel("nTtaue")
 for file_path, power in zip(files_paths, B0_values):
     results = get_triple_product(file_path, start, end)
