@@ -41,7 +41,7 @@ def get_average(file_path, start, end, variables):
 
 def get_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
-    triple_product_variables = ["ne0", "te0", "taue"]
+    triple_product_variables = ["ni0", "tite", "taue"]
     results = []
     for variable in triple_product_variables:
         a = full_dataset["post"]["zerod"][0][0][variable][0][0]
@@ -58,7 +58,7 @@ def get_triple_product(file_path, start, end):
     return ["triple_product", triple_product_avg, triple_product_std]
     
 
-variables = ["ne0", "te0", "taue", "betap"]
+variables = ["ni0", "tite", "taue", "betap"]
 start = 50
 end = 100
 
