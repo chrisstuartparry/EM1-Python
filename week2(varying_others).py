@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 
 chosen_subsection = "zerod"
-variables = ["taue", "qeff", "modeh"]
+variables = ["taue", "betan", "modeh", "qeff"]
 start = 50
 end = 100
 save_graph = False
@@ -51,7 +51,7 @@ def get_average(file_path, start, end, variables):
         results.append([variable, avg, std])
     return results
 
-fig, axs = plt.subplots(1, len(variables) + 1, figsize=(10, 5))
+fig, axs = plt.subplots(1, len(variables) + 1, figsize=(15, 5))
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -59,7 +59,10 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
         r"\usepackage{siunitx}",
     ]
 )
-
+fig.suptitle(
+    "Plots of the average values of the chosen variables against B0 at an NBI power of 2 MW",
+    fontsize=16,
+)
 axs[0].set_title("Triple Product")
 axs[0].set_xlabel("B0 (T)")
 axs[0].set_ylabel("nTtaue")
@@ -68,7 +71,7 @@ for file_path, power in zip(files_paths, B0_values):
     triple_product, avg, std = results
     axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 for i, variable in enumerate(variables):
-    # axs[i].set_title(variable)
+    axs[i+1].set_title(f"{variable}")
     axs[i+1].set_xlabel("Power (MW)")
     axs[i+1].set_ylabel(variable)
     for file_path, power in zip(files_paths, B0_values):
