@@ -5,7 +5,10 @@ import os
 
 # from matplotlib.widgets import CheckButtons
 
+variables = ["ni0", "tite", "taue", "betap"]
 chosen_subsection = "zerod"
+start = 50
+end = 100
 triple_product = True
 save_graph = False
 if save_graph:
@@ -58,9 +61,6 @@ def get_triple_product(file_path, start, end):
     return ["triple_product", triple_product_avg, triple_product_std]
     
 
-variables = ["ni0", "tite", "taue", "betap"]
-start = 50
-end = 100
 
 # for file_path in files_paths:
 #     results = get_average(file_path, start, end, variables)

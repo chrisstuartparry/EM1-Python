@@ -3,6 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+chosen_subsection = "zerod"
+variables = ["taue", "qeff", "modeh"]
+start = 50
+end = 100
+save_graph = False
+if save_graph:
+    fig_file = input("Enter the name of the file to save the graph to: ")
 
 base_path = "EM1 Data/4th Run Data (fast mode)"
 file_name_template = "2023-01-27 NBI Power 2MW B0 {B0_value}T.mat"
@@ -13,12 +20,11 @@ files_paths = [
     for value in B0_values
 ]
 
-start = 50
-end = 100
+
 
 def get_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
-    triple_product_variables = ["ne0", "te0", "taue"]
+    triple_product_variables = ["ni0", "tite", "taue"]
     results = []
     for variable in triple_product_variables:
         a = full_dataset["post"]["zerod"][0][0][variable][0][0]
@@ -34,8 +40,18 @@ def get_triple_product(file_path, start, end):
     )
     return ["triple_product", triple_product_avg, triple_product_std]
 
+def get_average(file_path, start, end, variables):
+    full_dataset = scipy.io.loadmat(file_path)
+    results = []
+    for variable in variables:
+        a = full_dataset["post"][chosen_subsection][0][0][variable][0][0]
+        a = [float(x[0]) for x in a]
+        avg = np.mean(a[start:end])
+        std = np.std(a[start:end])
+        results.append([variable, avg, std])
+    return results
 
-fig, axs = plt.subplots(1, 1, figsize=(10, 5))
+fig, axs = plt.subplots(1, len(variables) + 1, figsize=(10, 5))
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -43,12 +59,26 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
         r"\usepackage{siunitx}",
     ]
 )
-axs.set_title("Triple Product")
-axs.set_xlabel("B0 (T)")
-axs.set_ylabel("nTtaue")
+
+axs[0].set_title("Triple Product")
+axs[0].set_xlabel("B0 (T)")
+axs[0].set_ylabel("nTtaue")
 for file_path, power in zip(files_paths, B0_values):
     results = get_triple_product(file_path, start, end)
     triple_product, avg, std = results
-    axs.errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
+    axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
+for i, variable in enumerate(variables):
+    # axs[i].set_title(variable)
+    axs[i+1].set_xlabel("Power (MW)")
+    axs[i+1].set_ylabel(variable)
+    for file_path, power in zip(files_paths, B0_values):
+        # print(f"Getting data for {variable} at {power} MW")
+        results = get_average(file_path, start, end, variables)
+        variable, avg, std = results[i]
+        # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
+        # print(f"Plotting {variable} at {power} MW")
+        axs[i+1].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 fig.tight_layout()
+if save_graph:
+    plt.savefig(fig_file, dpi=500)
 plt.show()
