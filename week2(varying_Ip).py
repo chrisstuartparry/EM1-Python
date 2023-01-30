@@ -11,8 +11,8 @@ save_graph = False
 if save_graph:
     fig_file = input("Enter the name of the file to save the graph to: ")
 
-base_path = "EM1 Data/5th Run Data (fast mode)"
-file_name_template = " NBI Power 2MW Ip {Ip}T.mat"
+base_path = "EM1 Data/th Run Data (fast mode)"
+file_name_template = " NBI Power 2MW Ip {Ip}.mat"
 Ip_values = 
 
 files_paths = [
