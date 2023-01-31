@@ -13,7 +13,7 @@ if save_graph:
 
 base_path = "EM1 Data/th Run Data (fast mode)"
 file_name_template = " NBI Power 2MW Ip {Ip}.mat"
-Ip_values = 
+Ip_values = np.array(range(1,51,1), dtype=float)/10
 
 files_paths = [
     os.path.join(base_path, file_name_template.format(Ip=value))
