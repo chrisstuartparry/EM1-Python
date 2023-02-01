@@ -72,7 +72,7 @@ for file_path, power in zip(files_paths, Ip_values):
     axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 for i, variable in enumerate(variables):
     axs[i+1].set_title(f"{variable}")
-    axs[i+1].set_xlabel("Power (MW)")
+    axs[i+1].set_xlabel("Ip (MA)")
     axs[i+1].set_ylabel(variable)
     for file_path, power in zip(files_paths, Ip_values):
         # print(f"Getting data for {variable} at {power} MW")
