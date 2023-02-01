@@ -65,7 +65,7 @@ fig.suptitle(
     fontsize=16,
 )
 axs[0].set_title("Triple Product")
-axs[0].set_xlabel("nbar (T)")
+axs[0].set_xlabel("nbar (m$^{-3}$)")
 axs[0].set_ylabel("nTtaue")
 for file_path, power in zip(files_paths, nbar_values):
     results = get_triple_product(file_path, start, end)
@@ -73,7 +73,7 @@ for file_path, power in zip(files_paths, nbar_values):
     axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 for i, variable in enumerate(variables):
     axs[i+1].set_title(f"{variable}")
-    axs[i+1].set_xlabel("Power (MW)")
+    axs[i+1].set_xlabel("nbar (m$^{-3}$)")
     axs[i+1].set_ylabel(variable)
     for file_path, power in zip(files_paths, nbar_values):
         # print(f"Getting data for {variable} at {power} MW")

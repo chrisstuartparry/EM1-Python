@@ -64,7 +64,7 @@ fig.suptitle(
     fontsize=16,
 )
 axs[0].set_title("Triple Product")
-axs[0].set_xlabel("Ip ()")
+axs[0].set_xlabel("Ip (MA)")
 axs[0].set_ylabel("nTtaue")
 for file_path, power in zip(files_paths, Ip_values):
     results = get_triple_product(file_path, start, end)
