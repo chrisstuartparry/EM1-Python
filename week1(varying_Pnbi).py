@@ -98,7 +98,7 @@ if triple_product:
         triple_product, avg, std = results
         axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
     for i, variable in enumerate(variables):
-        # axs[i].set_title(variable)
+        axs[i+1].set_title(variable)
         axs[i+1].set_xlabel("Power (MW)")
         axs[i+1].set_ylabel(variable)
         for file_path, power in zip(files_paths, NBI_powers):
