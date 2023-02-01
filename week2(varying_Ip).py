@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import os
 
 chosen_subsection = "zerod"
-variables = ["taue", "betan", "modeh", "qeff"]
+# variables = ["taue", "betan", "modeh", "qeff"]
+# variables = ["taue", "negr"]
+variables = ["taue", "betap"]
 start = 50
 end = 100
 save_graph = False
