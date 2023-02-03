@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+
 def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
     full_dataset = scipy.io.loadmat(file_path)
     results = []
@@ -13,6 +14,7 @@ def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
         std = np.std(a[start:end])
         results.append([variable, avg, std])
     return results
+
 
 def get_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
