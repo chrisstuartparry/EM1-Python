@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 import os
 
 
+def get_variable(file_path, variables, chosen_subsection="zerod"):
+    full_dataset = scipy.io.loadmat(file_path)
+    results = []
+    for variable in variables:
+        a = full_dataset["post"][chosen_subsection][0][0][variable][0][0]
+        a = [float(x[0]) for x in a]
+        results.append([variable, a])
+    return results
+
+
 def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
     full_dataset = scipy.io.loadmat(file_path)
     results = []

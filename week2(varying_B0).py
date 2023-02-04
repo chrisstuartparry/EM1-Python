@@ -14,11 +14,11 @@ if save_graph:
 
 base_path = "EM1 Data/4th Run Data (fast mode)"
 file_name_template = "2023-01-27 NBI Power 2MW B0 {B0_value}T.mat"
-B0_values = np.array(range(1, 41, 1), dtype=float) / 10
+file_values = np.array(range(1, 41, 1), dtype=float) / 10
 
 files_paths = [
     os.path.join(base_path, file_name_template.format(B0_value=value))
-    for value in B0_values
+    for value in file_values
 ]
 
 
@@ -37,22 +37,22 @@ fig.suptitle(
 axs[0].set_title("Triple Product")
 axs[0].set_xlabel("B0 (T)")
 axs[0].set_ylabel("nTtaue")
-for file_path, power in zip(files_paths, B0_values):
+for file_path, value in zip(files_paths, file_values):
     results = get_triple_product(file_path, start, end)
     triple_product, avg, std = results
-    axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
+    axs[0].errorbar(value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
 for i, variable in enumerate(variables):
     axs[i + 1].set_title(f"{variable}")
     axs[i + 1].set_xlabel("B0 (T)")
     axs[i + 1].set_ylabel(variable)
-    for file_path, power in zip(files_paths, B0_values):
+    for file_path, value in zip(files_paths, file_values):
         # print(f"Getting data for {variable} at {power} MW")
         results = get_average(file_path, start, end, variables)
         variable, avg, std = results[i]
         # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
         # print(f"Plotting {variable} at {power} MW")
         axs[i + 1].errorbar(
-            power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+            value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
         )
 fig.tight_layout()
 if save_graph:
