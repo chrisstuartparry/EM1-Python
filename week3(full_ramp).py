@@ -2,7 +2,7 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from EM1PythonFunctions import get_average, get_triple_product
+from EM1PythonFunctions import get_average, get_triple_product, get_variable
 
 chosen_subsection = "zerod"
 variables = ["taue", "betan", "modeh", "qeff"]
@@ -15,15 +15,17 @@ if save_graph:
 
 base_path = "EM1 Data/8th Run Data (fast mode)"
 file_name_template = "2023-02-03 NBI Ramping 0 to {last_pnbi_value}MW.mat"
-last_pnbi_values = np.array(range(2, 11, 2))
+file_values = np.array(range(2, 11, 2))
 
 files_paths = [
     os.path.join(base_path, file_name_template.format(last_pnbi_value=value))
-    for value in last_pnbi_values
+    for value in file_values
 ]
 
 
-fig, axs = plt.subplots(1, len(variables) + 1, figsize=(15, 5))
+fig, axs = plt.subplots(
+    len(files_paths), len(variables), figsize=(15, 5 * len(files_paths))
+)
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -32,30 +34,30 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
     ]
 )
 fig.suptitle(
-    "Plots of the average values of the chosen variables against NBI power",
+    "Plots of the chosen variables against Time (s)",
     fontsize=16,
 )
-axs[0].set_title("Triple Product")
-axs[0].set_xlabel("NBI Power (MW)")
-axs[0].set_ylabel("nTtaue")
-for file_path, power in zip(files_paths, last_pnbi_values):
-    results = get_triple_product(file_path, start, end)
-    triple_product, avg, std = results
-    axs[0].errorbar(power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
-for i, variable in enumerate(variables):
-    axs[i + 1].set_title(f"{variable}")
-    axs[i + 1].set_xlabel("NBI Power (MW)")
-    axs[i + 1].set_ylabel(variable)
-    for file_path, power in zip(files_paths, last_pnbi_values):
-        # print(f"Getting data for {variable} at {power} MW")
-        results = get_average(file_path, start, end, variables)
-        variable, avg, std = results[i]
-        # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-        # print(f"Plotting {variable} at {power} MW")
-        axs[i + 1].errorbar(
-            power, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-        )
-fig.tight_layout()
+
+
+def plot_variable(files_paths, variables, axs):
+    for j, file_path in enumerate(files_paths):
+        for i, variable in enumerate(variables):
+            ax = axs[j, i]
+            ax.set_title(f"{variable}")
+            ax.set_xlabel("Time (s)")
+            ax.set_ylabel(variable)
+
+            time_results = get_variable(file_path, ["temps"])
+            times = time_results[0][1]
+            results = get_variable(file_path, variables)
+            variable, ydata = results[i]
+            # print(
+            #     f"times: {times}, times type: {type(times)} \n ydata: {ydata}, ydata type: {type(ydata)}, \n variable: {variable}, variable type: {type(variable)}"
+            # )
+            ax.plot(times, ydata, ".", color="black")
+
+
+plot_variable(files_paths, variables, axs)
 if save_graph:
     plt.savefig(fig_file, dpi=500)
 plt.show()
