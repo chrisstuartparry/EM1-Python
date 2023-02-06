@@ -7,6 +7,12 @@ from EM1PythonFunctions import get_average, get_triple_product, get_variable
 chosen_subsection = "zerod"
 variables = ["taue", "betan", "modeh", "qeff"]
 # variables = ["taue", "q0", "q95", "qeff"]
+units = {
+    "taue": r"\unit{\second}",
+    "betan": "",
+    "modeh": "",
+    "qeff": "",
+}
 start = 50
 end = 100
 save_graph = False
@@ -34,7 +40,7 @@ files_paths = [
 nrows = len(files_paths)
 ncols = len(variables)
 fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True)
-plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
+# plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
     [
