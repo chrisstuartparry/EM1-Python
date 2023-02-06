@@ -25,7 +25,7 @@ files_paths = [
 
 nrows = len(files_paths)
 ncols = len(variables)
-fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows))
+fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True)
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -40,19 +40,20 @@ fig.suptitle(
 
 
 def plot_variable(files_paths, file_values, variables, axs):
-    for r, file_path in enumerate(files_paths):
-        for c, variable in enumerate(variables):
-            ax = axs[r, c]
-            if r == 0:
+    for i, file_path in enumerate(files_paths):
+        for j, variable in enumerate(variables):
+            ax = axs[i, j]
+            if i == 0:
                 ax.set_title(f"{variable}")
             time_results = get_variable(file_path, ["temps"])
             times = time_results[0][1]
             results = get_variable(file_path, variables)
-            variable, ydata = results[c]
+            variable, ydata = results[j]
             ax.plot(times, ydata, ".", color="black")
-            if r == nrows - 1:
+            if i == nrows - 1:
                 ax.set_xlabel("Time (s)")
-            ax.set_yticklabels([])
+            if j == 0:
+                ax.set_ylabel(f"0MW to {file_values[i]}MW")
 
 
 plot_variable(files_paths, file_values, variables, axs)
