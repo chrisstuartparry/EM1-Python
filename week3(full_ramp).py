@@ -23,9 +23,9 @@ files_paths = [
 ]
 
 
-fig, axs = plt.subplots(
-    len(files_paths), len(variables), figsize=(15, 5 * len(files_paths))
-)
+nrows = len(files_paths)
+ncols = len(variables)
+fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows))
 plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -39,25 +39,23 @@ fig.suptitle(
 )
 
 
-def plot_variable(files_paths, variables, axs):
-    for j, file_path in enumerate(files_paths):
-        for i, variable in enumerate(variables):
-            ax = axs[j, i]
-            ax.set_title(f"{variable}")
-            ax.set_xlabel("Time (s)")
-            ax.set_ylabel(variable)
-
+def plot_variable(files_paths, file_values, variables, axs):
+    for r, file_path in enumerate(files_paths):
+        for c, variable in enumerate(variables):
+            ax = axs[r, c]
+            if r == 0:
+                ax.set_title(f"{variable}")
             time_results = get_variable(file_path, ["temps"])
             times = time_results[0][1]
             results = get_variable(file_path, variables)
-            variable, ydata = results[i]
-            # print(
-            #     f"times: {times}, times type: {type(times)} \n ydata: {ydata}, ydata type: {type(ydata)}, \n variable: {variable}, variable type: {type(variable)}"
-            # )
+            variable, ydata = results[c]
             ax.plot(times, ydata, ".", color="black")
+            if r == nrows - 1:
+                ax.set_xlabel("Time (s)")
+            ax.set_yticklabels([])
 
 
-plot_variable(files_paths, variables, axs)
+plot_variable(files_paths, file_values, variables, axs)
 if save_graph:
     plt.savefig(fig_file, dpi=500)
 plt.show()
