@@ -12,6 +12,8 @@ units = {
     "betan": "",
     "modeh": "",
     "qeff": "",
+    "temps": r"\unit{\second}",
+    "pnbi": r"\unit{\watt}",
 }
 start = 50
 end = 100
@@ -58,7 +60,7 @@ def plot_variable(files_paths, first_file_values, last_file_values, variables, a
         for j, variable in enumerate(variables):
             ax = axs[i, j]
             if i == 0:
-                ax.set_title(f"{variable}")
+                ax.set_title(f"{variable}, {units[variable]} against Time (s)")
             time_results = get_variable(file_path, ["temps"])
             times = time_results[0][1]
             results = get_variable(file_path, variables)
