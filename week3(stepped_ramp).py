@@ -57,23 +57,22 @@ def plot_variable(files_paths, first_file_values, last_file_values, variables, a
             ax = axs[i, j]
             if variable_units[variable] != "":
                 if i == 0:
-                    ax.set_title(
-                        f'{variable_symbols[variable]} ({variable_units[variable]}) against Time ({variable_units["temps"]})'
-                    )
+                    ax.set_title(f"{variable_meanings[variable]} against Time")
+
+                ax.set_ylabel(
+                    f"{variable_symbols[variable]} ({variable_units[variable]})"
+                )
             else:
                 if i == 0:
-                    ax.set_title(
-                        f'{variable_symbols[variable]} against Time ({variable_units["temps"]})'
-                    )
+                    ax.set_title(f"{variable_meanings[variable]} against Time")
+                ax.set_ylabel(f"{variable_symbols[variable]}")
             time_results = get_variable(file_path, ["temps"])
             times = time_results[0][1]
             results = get_variable(file_path, variables)
             variable, ydata = results[j]
             ax.plot(times, ydata, ".", color="black")
             if i == nrows - 1:
-                ax.set_xlabel("Time (s)")
-            if j == 0:
-                ax.set_ylabel(f"{first_file_values[i]}MW to {last_file_values[i]}MW")
+                ax.set_xlabel(f'{variable_symbols["temps"]} {variable_units["temps"]}')
 
 
 plot_variable(files_paths, first_file_values, last_file_values, variables, axs)
