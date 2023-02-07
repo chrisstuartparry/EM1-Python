@@ -55,7 +55,20 @@ def add_headers(
     rotate_row_headers=True,
     **text_kwargs
 ):
-    # Based on https://stackoverflow.com/a/25814386
+    """
+    Function to add row and column headers to a matplotlib figure.
+
+    Based on https://stackoverflow.com/a/25814386
+
+    Args:
+        fig (_type_): The figure which contains the axes to work on
+        row_headers (_type_, optional):  A sequence of strings to be row headers. Defaults to None.
+        col_headers (_type_, optional): A sequence of strings to be column headers. Defaults to None.
+        row_pad (int, optional): Value to adjust padding. Defaults to 1.
+        col_pad (int, optional): Value to adjust padding. Defaults to 5.
+        rotate_row_headers (bool, optional): Whether to rotate by 90° the row headers. Defaults to True.
+        **text_kwargs: Forwarded to ax.annotate(...)
+    """
 
     axes = fig.get_axes()
 
