@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from EM1PythonFunctions import get_average, get_triple_product, get_variable
+from EM1PythonDictionaries import variable_symbols, variable_units
 
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -12,49 +13,9 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 )
 
 chosen_subsection = "zerod"
-variables = ["taue", "betan", "modeh", "qeff"]
-# variables = ["taue", "q0", "q95", "qeff"]
-variable_symbols = {
-    "taue": r"$\tau_E$",
-    "betan": r"$\beta_{\mathrm{normalised}}$",
-    "modeh": r"H-Mode",
-    "qeff": r"$q_{\mathrm{effective}}$",
-    "q0": r"$q_0$",
-    "q95": r"$q_{95}$",
-    "temps": r"$t$",
-    "pnbi": r"$PNBI_{\mathrm{input}}$",
-    "frnbi": r"$PNBI_{\mathrm{frac absorbed in plasma}}$",
-    "ip:": r"$I_{\mathrm{plasma}}$",
-    "betap": r"$\beta_{\mathrm{poloidal}}$",
-    "nbar": r"$\bar{n}$",
-    "ne0": r"$n_{e(0)}$",
-    "ni0": r"$n_{i(0)}$",
-    "pfus": r"$P_{\mathrm{fusion}}$",
-    "sext": r"$S_{\mathrm{external}}$",
-    "vp": r"$V_{\mathrm{plasma}}$",
-    "W": r"$E_{\mathrm{total in plasma}}$",
-}
+# variables = ["taue", "betan", "modeh", "qeff"]
+variables = ["taue", "q0", "q95", "qeff"]
 
-variable_units = {
-    "taue": r"\unit{\second}",
-    "betan": "",
-    "modeh": "",
-    "qeff": "",
-    "q0": "",
-    "q95": "",
-    "temps": r"\unit{\second}",
-    "pnbi": r"\unit{\watt}",
-    "frnbi": "",
-    "ip:": r"$\unit{ampere}$",
-    "betap": "",
-    "nbar": "",
-    "ne0": "",
-    "ni0": "",
-    "pfus": r"\unit{\watt}",
-    "sext": r"\unit{\metre\squared}",
-    "vp": r"\unit{\metre\cubed}",
-    "W": r"\unit{\joule}",
-}
 
 start = 50
 end = 100
