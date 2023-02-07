@@ -6,6 +6,7 @@ from EM1PythonFunctions import (
     get_average,
     get_triple_product,
     get_variable,
+    plot_variable,
     add_headers,
 )
 from EM1PythonDictionaries import variable_symbols, variable_units, variable_meanings
@@ -53,44 +54,6 @@ fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layou
 #     f'Plots of the chosen variables against {variable_symbols["temps"]}{variable_units["temps"]}',
 #     fontsize=16,
 # )
-
-
-def plot_variable(
-    files_paths,
-    first_file_values,
-    last_file_values,
-    variables,
-    axs,
-    row_header_yesno=True,
-):
-    row_headers = []
-    for i, file_path in enumerate(files_paths):
-        for j, variable in enumerate(variables):
-            ax = axs[i, j]
-            if variable_units[variable] != "":
-                if i == 0:
-                    ax.set_title(
-                        f"{variable_meanings[variable]} against {variable_meanings['temps']}"
-                    )
-
-                ax.set_ylabel(
-                    f"{variable_symbols[variable]} ({variable_units[variable]})"
-                )
-            else:
-                if i == 0:
-                    ax.set_title(
-                        f"{variable_meanings[variable]} against {variable_meanings['temps']}"
-                    )
-                ax.set_ylabel(f"{variable_symbols[variable]}")
-            time_results = get_variable(file_path, ["temps"])
-            times = time_results[0][1]
-            results = get_variable(file_path, variables)
-            variable, ydata = results[j]
-            ax.plot(times, ydata, ".", color="black")
-            ax.set_xlabel(f'{variable_symbols["temps"]} ({variable_units["temps"]})')
-        if row_header_yesno:
-            row_headers.append(f"{first_file_values[i]}MW to {last_file_values[i]}MW")
-    return row_headers
 
 
 plot_variable(files_paths, first_file_values, last_file_values, variables, axs)
