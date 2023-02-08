@@ -8,9 +8,7 @@ variable_symbols = {
     "temps": r"$t$",
     "pnbi": r"$P_{\mathrm{NBI input}}$",
     "frnbi": r"$P_{\mathrm{NBI frac}}$",
-    "ip:": r"$I_{\mathrm{plasma}}$",
     "betap": r"$\beta_{\mathrm{P}}$",
-    "nbar": r"$\bar{n}$",
     "ne0": r"$n_{e(0)}$",
     "ni0": r"$n_{i(0)}$",
     "te0": r"$T_{e(0)}$",
@@ -20,6 +18,8 @@ variable_symbols = {
     "sext": r"$S_{\mathrm{external}}$",
     "vp": r"$V_{\mathrm{plasma}}$",
     "W": r"$E_{\mathrm{plasma}}$",
+    "ni0titetaue": r"$n_{i(0)}\frac{T_i}{T_e}\tau_E$",  # This is a custom variable
+    "nimtimtaue": r"$n_{i(m)}T_{i(m)}\tau_E$",  # This is a custom variable
 }
 
 variable_meanings = {
@@ -44,6 +44,8 @@ variable_meanings = {
     "sext": "External Plasma Surface",
     "vp": "Plasma Volume",
     "W": "Total Plasma Energy",
+    "ni0titetaue": "nTtau (central ion density, ratio of volume averaged ion temperature over electron temperature)",  # This is a custom variable
+    "nimtimtaue": "nTtau (mean ion density, mean ion temperature)",
 }
 
 variable_units = {
@@ -58,9 +60,9 @@ variable_units = {
     "frnbi": "",
     "ip:": r"$\unit{ampere}$",
     "betap": "",
-    "nbar": "",
-    "ne0": "",
-    "ni0": "",
+    "nbar": r"\unit{\per\metre\squared}",
+    "ne0": r"\unit{\per\metre\cubed}",
+    "ni0": r"\unit{\per\metre\cubed}",
     "te0": r"\unit{\electronvolt}",
     "tite": "",
     "tem": r"\unit{\electronvolt}",
@@ -68,4 +70,35 @@ variable_units = {
     "sext": r"\unit{\metre\squared}",
     "vp": r"\unit{\metre\cubed}",
     "W": r"\unit{\joule}",
+    "ni0titetaue": r"\unit{\second}",  # This is a custom variable
+}
+
+parameter_symbols = {
+    "b0": r"$B_0$",  # Toroidal Magnetic Field
+    "a": r"$a$",  # Minor Radius of Plasma
+    "R0": r"$R_0$",  # Major Radius of Plasma
+    "z0": r"$Z_0$",  # Height of Plasma
+    "ip": r"$I_{\mathrm{plasma}}$",
+    "Nbar": r"$\bar{N}$",
+    "NBI": r"$P_{\mathrm{NBI}}$",
+}
+
+parameter_meanings = {
+    "b0": "Toroidal Magnetic Field",
+    "a": "Minor Radius of Plasma",
+    "R0": "Major Radius of Plasma",
+    "z0": "Height of Plasma",
+    "ip": "Plasma Current",
+    "Nbar": "Line averaged electron density",
+    "NBI": "NBI Power injected into plasma",
+}
+
+parameter_units = {
+    "b0": r"\unit{\tesla}",
+    "a": r"\unit{\metre}",
+    "R0": r"\unit{\metre}",
+    "z0": r"\unit{\metre}",
+    "ip": r"\unit{\ampere}",
+    "Nbar": r"\unit{\per\metre\cubed}",
+    "NBI": r"\unit{\watt}",
 }

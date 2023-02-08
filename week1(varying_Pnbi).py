@@ -2,8 +2,14 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-
-from EM1PythonFunctions import get_average, get_triple_product
+from EM1PythonFunctions import (
+    get_average,
+    get_triple_product,
+    get_variable,
+    plot_variable,
+    add_headers,
+)
+from EM1PythonDictionaries import variable_symbols, variable_units, variable_meanings
 
 # from matplotlib.widgets import CheckButtons
 
@@ -71,6 +77,52 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 #     "Plot of the average of the variables te0, ne0, and taue, recorded on 20/10/22",
 #     fontsize=16,
 # )
+
+# TODO change triple product statement below into a function
+
+
+def plot_averages(
+    files_paths, file_values, variables, start, end, axs, plot_triple_product=True
+):
+    if plot_triple_product:
+        # Add a new subplot for the triple product
+        axs[0].set_title("Triple Product")
+        axs[0].set_xlabel("Power (MW)")
+        axs[0].set_ylabel("nTtaue")
+        for file_path, value in zip(files_paths, file_values):
+            results = get_triple_product(file_path, start, end)
+            triple_product, avg, std = results
+            axs[0].errorbar(
+                value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+            )
+        for i, variable in enumerate(variables):
+            axs[i + 1].set_title(variable)
+            axs[i + 1].set_xlabel("Power (MW)")
+            axs[i + 1].set_ylabel(variable)
+            for file_path, value in zip(files_paths, file_values):
+                # print(f"Getting data for {variable} at {power} MW")
+                results = get_average(file_path, start, end, variables)
+                variable, avg, std = results[i]
+                # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
+                # print(f"Plotting {variable} at {power} MW")
+                axs[i + 1].errorbar(
+                    value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+                )
+    else:
+        for i, variable in enumerate(variables):
+            axs[i].set_title(variable)
+            axs[i].set_xlabel("Power (MW)")
+            axs[i].set_ylabel(variable)
+            for file_path, value in zip(files_paths, file_values):
+                # print(f"Getting data for {variable} at {power} MW")
+                results = get_average(file_path, start, end, variables)
+                variable, avg, std = results[i]
+                # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
+                # print(f"Plotting {variable} at {power} MW")
+                axs[i].errorbar(
+                    value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+                )
+
 
 if triple_product:
     # Add a new subplot for the triple product

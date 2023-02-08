@@ -138,3 +138,5 @@ def add_headers(
                 rotation=rotate_row_headers * 90,
                 **text_kwargs,
             )
+
+    
