@@ -2,7 +2,14 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from EM1PythonDictionaries import variable_meanings, variable_symbols, variable_units
+from EM1PythonDictionaries import (
+    variable_meanings, 
+    variable_symbols, 
+    variable_units, 
+    parameter_meanings, 
+    parameter_symbols, 
+    parameter_units,
+)
 
 
 def get_variable(file_path, variables, chosen_subsection="zerod"):
@@ -44,6 +51,15 @@ def get_triple_product(file_path, start, end):
         + (results[2][2] / results[2][1]) ** 2
     )
     return ["triple_product", triple_product_avg, triple_product_std]
+
+def get_new_triple_product(file_path, start, end):
+    full_dataset = scipy.io.loadmat(file_path)
+    progenitor_variables = ["tite", "tem"]
+    # multiply ti/te by te to get ti:
+    progenitor_results = get_variable(file_path, progenitor_variables)
+    ti = np.array(progenitor_results[0][1]) * np.array(progenitor_results[1][1])
+    print("ti: \n", ti)
+        
 
 def plot_variable(
     files_paths,
