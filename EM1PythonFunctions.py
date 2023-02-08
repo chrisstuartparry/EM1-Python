@@ -3,11 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from EM1PythonDictionaries import (
-    variable_meanings, 
-    variable_symbols, 
-    variable_units, 
-    parameter_meanings, 
-    parameter_symbols, 
+    variable_meanings,
+    variable_symbols,
+    variable_units,
+    parameter_meanings,
+    parameter_symbols,
     parameter_units,
 )
 
@@ -52,17 +52,22 @@ def get_triple_product(file_path, start, end):
     )
     return ["triple_product", triple_product_avg, triple_product_std]
 
+
 def get_new_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
     progenitor_variables = ["tite", "tem"]
     # multiply ti/te by te to get ti:
     progenitor_results_raw = get_variable(file_path, progenitor_variables)
-    ti = np.array(progenitor_results[0][1]) * np.array(progenitor_results[1][1])
+    ti = np.array(progenitor_results_raw[0][1]) * np.array(progenitor_results_raw[1][1])
     print("ti: \n", ti)
     progenitor_results_name = ["ti"]
     progenitor_results_mean = np.mean(ti[start:end])
     progenitor_results_std = np.std(ti[start:end])
-    progenitor_results_total = [progenitor_results_name, progenitor_results_mean, progenitor_results_std]
+    progenitor_results_total = [
+        progenitor_results_name,
+        progenitor_results_mean,
+        progenitor_results_std,
+    ]
     remaining_triple_product_variables = ["ni0", "taue"]
     results = []
     for variable in remaining_triple_product_variables:
@@ -78,6 +83,7 @@ def get_new_triple_product(file_path, start, end):
         + (results[1][2] / results[1][1]) ** 2
     )
     return ["triple_product", triple_product_avg, triple_product_std]
+
 
 def plot_variable(
     files_paths,
@@ -116,6 +122,7 @@ def plot_variable(
             row_headers.append(f"{first_file_values[i]}MW to {last_file_values[i]}MW")
     return row_headers
 
+
 def add_headers(
     fig,
     *,
@@ -124,7 +131,7 @@ def add_headers(
     row_pad=1,
     col_pad=5,
     rotate_row_headers=True,
-    **text_kwargs
+    **text_kwargs,
 ):
     """
     Function to add row and column headers to a matplotlib figure.
@@ -172,5 +179,3 @@ def add_headers(
                 rotation=rotate_row_headers * 90,
                 **text_kwargs,
             )
-
-    
