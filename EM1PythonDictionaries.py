@@ -58,7 +58,7 @@ variable_units = {
     "temps": r"\unit{\second}",
     "pnbi": r"\unit{\watt}",
     "frnbi": "",
-    "ip:": r"$\unit{ampere}$",
+    "ip:": r"$\unit{\ampere}$",
     "betap": "",
     "nbar": r"\unit{\per\metre\squared}",
     "ne0": r"\unit{\per\metre\cubed}",
@@ -70,7 +70,8 @@ variable_units = {
     "sext": r"\unit{\metre\squared}",
     "vp": r"\unit{\metre\cubed}",
     "W": r"\unit{\joule}",
-    "ni0titetaue": r"\unit{\second}",  # This is a custom variable
+    "ni0titetaue": r"\unit{\second\per\metre\cubed}",  # This is a custom variable
+    "nimtimtaue": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable
 }
 
 parameter_symbols = {
