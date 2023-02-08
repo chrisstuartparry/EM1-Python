@@ -9,7 +9,14 @@ from EM1PythonFunctions import (
     plot_variable,
     add_headers,
 )
-from EM1PythonDictionaries import variable_symbols, variable_units, variable_meanings
+from EM1PythonDictionaries import (
+    variable_meanings,
+    variable_symbols,
+    variable_units,
+    parameter_meanings,
+    parameter_symbols,
+    parameter_units,
+)
 
 # from matplotlib.widgets import CheckButtons
 
