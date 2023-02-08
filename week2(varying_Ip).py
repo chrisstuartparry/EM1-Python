@@ -2,7 +2,14 @@ import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from EM1PythonFunctions import get_average, get_triple_product
+from EM1PythonFunctions import (
+    get_average,
+    get_triple_product,
+    get_variable,
+    plot_variable,
+    add_headers,
+)
+from EM1PythonDictionaries import variable_symbols, variable_units, variable_meanings
 
 
 chosen_subsection = "zerod"
