@@ -56,10 +56,28 @@ def get_new_triple_product(file_path, start, end):
     full_dataset = scipy.io.loadmat(file_path)
     progenitor_variables = ["tite", "tem"]
     # multiply ti/te by te to get ti:
-    progenitor_results = get_variable(file_path, progenitor_variables)
+    progenitor_results_raw = get_variable(file_path, progenitor_variables)
     ti = np.array(progenitor_results[0][1]) * np.array(progenitor_results[1][1])
     print("ti: \n", ti)
-        
+    progenitor_results_name = ["ti"]
+    progenitor_results_mean = np.mean(ti[start:end])
+    progenitor_results_std = np.std(ti[start:end])
+    progenitor_results_total = [progenitor_results_name, progenitor_results_mean, progenitor_results_std]
+    remaining_triple_product_variables = ["ni0", "taue"]
+    results = []
+    for variable in remaining_triple_product_variables:
+        a = full_dataset["post"]["zerod"][0][0][variable][0][0]
+        a = [float(x[0]) for x in a]
+        avg = np.mean(a[start:end])
+        std = np.std(a[start:end])
+        results.append([variable, avg, std])
+    triple_product_avg = progenitor_results_total[1] * results[0][1] * results[1][1]
+    triple_product_std = triple_product_avg * np.sqrt(
+        (progenitor_results_total[2] / progenitor_results_total[1]) ** 2
+        + (results[0][2] / results[0][1]) ** 2
+        + (results[1][2] / results[1][1]) ** 2
+    )
+    return ["triple_product", triple_product_avg, triple_product_std]
 
 def plot_variable(
     files_paths,
