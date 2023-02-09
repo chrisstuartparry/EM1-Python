@@ -59,7 +59,6 @@ def get_new_triple_product(file_path, start, end):
     # multiply ti/te by te to get ti:
     progenitor_results_raw = get_variable(file_path, progenitor_variables)
     ti = np.array(progenitor_results_raw[0][1]) * np.array(progenitor_results_raw[1][1])
-    print("ti: \n", ti)
     progenitor_results_name = ["ti"]
     progenitor_results_mean = np.mean(ti[start:end])
     progenitor_results_std = np.std(ti[start:end])

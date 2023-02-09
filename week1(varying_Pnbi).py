@@ -8,6 +8,7 @@ from EM1PythonFunctions import (
     get_variable,
     plot_variable,
     add_headers,
+    get_new_triple_product,
 )
 from EM1PythonDictionaries import (
     variable_meanings,
@@ -16,6 +17,14 @@ from EM1PythonDictionaries import (
     parameter_meanings,
     parameter_symbols,
     parameter_units,
+)
+
+plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
+plt.rcParams["text.usetex"] = True
+plt.rcParams["text.latex.preamble"] = "\n".join(
+    [
+        r"\usepackage{siunitx}",
+    ]
 )
 
 # from matplotlib.widgets import CheckButtons
@@ -73,13 +82,7 @@ if triple_product:
 else:
     fig, axs = plt.subplots(1, len(variables), figsize=(18, 6))
 
-plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
-plt.rcParams["text.usetex"] = True
-plt.rcParams["text.latex.preamble"] = "\n".join(
-    [
-        r"\usepackage{siunitx}",
-    ]
-)
+
 # fig.suptitle(
 #     "Plot of the average of the variables te0, ne0, and taue, recorded on 20/10/22",
 #     fontsize=16,
@@ -89,16 +92,18 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 
 
 def plot_averages(
-    files_paths, file_values, variables, start, end, axs, plot_triple_product=True
+    files_paths, file_values, variables, start, end, axs, plot_triple_product
 ):
     if plot_triple_product:
         # Add a new subplot for the triple product
         axs[0].set_title("Triple Product")
         axs[0].set_xlabel("Power (MW)")
-        axs[0].set_ylabel("nTtaue")
+        axs[0].set_ylabel(
+            f'{variable_symbols["nimtimtaue"]} ({variable_units["nimtimtaue"]})'
+        )
         for file_path, value in zip(files_paths, file_values):
-            results = get_triple_product(file_path, start, end)
-            triple_product, avg, std = results
+            results = get_new_triple_product(file_path, start, end)
+            triple_product_name, avg, std = results
             axs[0].errorbar(
                 value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
             )
@@ -131,42 +136,9 @@ def plot_averages(
                 )
 
 
-if triple_product:
-    # Add a new subplot for the triple product
-    axs[0].set_title("Triple Product")
-    axs[0].set_xlabel("Power (MW)")
-    axs[0].set_ylabel("nTtaue")
-    for file_path, value in zip(files_paths, file_values):
-        results = get_triple_product(file_path, start, end)
-        triple_product, avg, std = results
-        axs[0].errorbar(value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
-    for i, variable in enumerate(variables):
-        axs[i + 1].set_title(variable)
-        axs[i + 1].set_xlabel("Power (MW)")
-        axs[i + 1].set_ylabel(variable)
-        for file_path, value in zip(files_paths, file_values):
-            # print(f"Getting data for {variable} at {power} MW")
-            results = get_average(file_path, start, end, variables)
-            variable, avg, std = results[i]
-            # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-            # print(f"Plotting {variable} at {power} MW")
-            axs[i + 1].errorbar(
-                value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-            )
-else:
-    for i, variable in enumerate(variables):
-        axs[i].set_title(variable)
-        axs[i].set_xlabel("Power (MW)")
-        axs[i].set_ylabel(variable)
-        for file_path, value in zip(files_paths, file_values):
-            # print(f"Getting data for {variable} at {power} MW")
-            results = get_average(file_path, start, end, variables)
-            variable, avg, std = results[i]
-            # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-            # print(f"Plotting {variable} at {power} MW")
-            axs[i].errorbar(
-                value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-            )
+plot_averages(
+    files_paths, file_values, variables, start, end, axs, plot_triple_product=True
+)
 fig.tight_layout()
 if save_graph:
     plt.savefig(fig_file, dpi=500)
