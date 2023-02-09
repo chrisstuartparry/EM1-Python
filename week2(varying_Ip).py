@@ -9,6 +9,7 @@ from EM1PythonFunctions import (
     plot_variable,
     add_headers,
     get_new_triple_product,
+    plot_averages,
 )
 from EM1PythonDictionaries import (
     variable_meanings,
@@ -19,11 +20,18 @@ from EM1PythonDictionaries import (
     parameter_units,
 )
 
+plt.rcParams["text.usetex"] = True
+plt.rcParams["text.latex.preamble"] = "\n".join(
+    [
+        r"\usepackage{siunitx}",
+    ]
+)
 
-chosen_subsection = "zerod"
 # variables = ["taue", "betan", "modeh", "qeff"]
 # variables = ["taue", "negr"]
 variables = ["taue", "betap"]
+chosen_subsection = "zerod"
+triple_product = True
 start = 50
 end = 100
 save_graph = False
@@ -39,40 +47,24 @@ files_paths = [
     for value in file_values
 ]
 
+nrows = 1
+if triple_product:
+    ncols = len(variables) + 1
+else:
+    ncols = len(variables)
+fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True)
 
-fig, axs = plt.subplots(1, len(variables) + 1, figsize=(15, 5))
-plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
-plt.rcParams["text.usetex"] = True
-plt.rcParams["text.latex.preamble"] = "\n".join(
-    [
-        r"\usepackage{siunitx}",
-    ]
+plot_averages(
+    files_paths,
+    file_values,
+    variables,
+    start,
+    end,
+    axs,
+    plot_triple_product=True,
+    x_parameter="Ip",
 )
-fig.suptitle(
-    "Plots of the average values of the chosen variables against Ip at an NBI power of 2 MW",
-    fontsize=16,
-)
-axs[0].set_title("Triple Product")
-axs[0].set_xlabel("Ip (MA)")
-axs[0].set_ylabel("nTtaue")
-for file_path, value in zip(files_paths, file_values):
-    results = get_triple_product(file_path, start, end)
-    triple_product, avg, std = results
-    axs[0].errorbar(value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5)
-for i, variable in enumerate(variables):
-    axs[i + 1].set_title(f"{variable}")
-    axs[i + 1].set_xlabel("Ip (MA)")
-    axs[i + 1].set_ylabel(variable)
-    for file_path, value in zip(files_paths, file_values):
-        # print(f"Getting data for {variable} at {power} MW")
-        results = get_average(file_path, start, end, variables)
-        variable, avg, std = results[i]
-        # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-        # print(f"Plotting {variable} at {power} MW")
-        axs[i + 1].errorbar(
-            value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-        )
-fig.tight_layout()
+
 if save_graph:
     plt.savefig(fig_file, dpi=500)
 plt.show()

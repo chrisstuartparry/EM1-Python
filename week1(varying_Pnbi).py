@@ -9,6 +9,7 @@ from EM1PythonFunctions import (
     plot_variable,
     add_headers,
     get_new_triple_product,
+    plot_averages,
 )
 from EM1PythonDictionaries import (
     variable_meanings,
@@ -29,9 +30,9 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 
 variables = ["ni0", "tite", "taue", "betap"]
 chosen_subsection = "zerod"
+triple_product = True
 start = 50
 end = 100
-triple_product = True
 save_graph = False
 if save_graph:
     fig_file = input("Enter the name of the file to save the graph to: ")
@@ -66,17 +67,6 @@ files_paths = [
 ]
 
 
-# for file_path in files_paths:
-#     results = get_average(file_path, start, end, variables)
-#     for variable, avg, std in results:
-#         print(
-#             f"Average for variable {variable} in {file_path} is: {avg} +/- {std} (std)"
-#         )
-
-
-# Plot the results
-
-
 nrows = 1
 if triple_product:
     ncols = len(variables) + 1
@@ -88,80 +78,6 @@ fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layou
 #     "Plot of the average of the variables te0, ne0, and taue, recorded on 20/10/22",
 #     fontsize=16,
 # )
-
-
-def plot_averages(
-    files_paths,
-    file_values,
-    variables,
-    start,
-    end,
-    axs,
-    plot_triple_product,
-    x_parameter,
-):
-    if plot_triple_product:
-
-        axs[0].set_title(
-            f"{variable_meanings['nimtimtaue']} vs. {parameter_symbols[x_parameter]}",
-            fontsize=10,
-        )
-        axs[0].set_xlabel(
-            f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
-        )
-        axs[0].set_ylabel(
-            f'{variable_symbols["nimtimtaue"]} ({variable_units["nimtimtaue"]})'
-        )
-        for file_path, value in zip(files_paths, file_values):
-            results = get_new_triple_product(file_path, start, end)
-            triple_product_name, avg, std = results
-            axs[0].errorbar(
-                value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-            )
-        for i, variable in enumerate(variables):
-            axs[i + 1].set_title(
-                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
-                fontsize=10,
-            )
-            axs[i + 1].set_xlabel(
-                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
-            )
-            if variable_units[variable] != "":
-                axs[i + 1].set_ylabel(
-                    f"{variable_symbols[variable]} ({variable_units[variable]})"
-                )
-            else:
-                axs[i + 1].set_ylabel(f"{variable_symbols[variable]}")
-            for file_path, value in zip(files_paths, file_values):
-                # print(f"Getting data for {variable} at {power} MW")
-                results = get_average(file_path, start, end, variables)
-                variable, avg, std = results[i]
-                # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-                # print(f"Plotting {variable} at {power} MW")
-                axs[i + 1].errorbar(
-                    value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-                )
-    else:
-        for i, variable in enumerate(variables):
-            axs[i].set_title(
-                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
-                fontsize=10,
-            )
-            axs[i].set_xlabel(
-                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
-            )
-            axs[i].set_ylabel(
-                f"{variable_symbols[variable]} ({variable_units[variable]})"
-            )
-            for file_path, value in zip(files_paths, file_values):
-                # print(f"Getting data for {variable} at {power} MW")
-                results = get_average(file_path, start, end, variables)
-                variable, avg, std = results[i]
-                # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
-                # print(f"Plotting {variable} at {power} MW")
-                axs[i].errorbar(
-                    value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
-                )
 
 
 plot_averages(

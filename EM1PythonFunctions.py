@@ -178,3 +178,73 @@ def add_headers(
                 rotation=rotate_row_headers * 90,
                 **text_kwargs,
             )
+
+
+def plot_averages(
+    files_paths,
+    file_values,
+    variables,
+    start,
+    end,
+    axs,
+    plot_triple_product,
+    x_parameter,
+):
+    if plot_triple_product:
+        axs[0].set_title(
+            f"{variable_meanings['nimtimtaue']} vs. {parameter_symbols[x_parameter]}",
+            fontsize=10,
+        )
+        axs[0].set_xlabel(
+            f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+        )
+        axs[0].set_ylabel(
+            f'{variable_symbols["nimtimtaue"]} ({variable_units["nimtimtaue"]})'
+        )
+        for file_path, value in zip(files_paths, file_values):
+            results = get_new_triple_product(file_path, start, end)
+            triple_product_name, avg, std = results
+            axs[0].errorbar(
+                value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+            )
+        for i, variable in enumerate(variables):
+            axs[i + 1].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
+                fontsize=10,
+            )
+            axs[i + 1].set_xlabel(
+                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+            )
+            if variable_units[variable] != "":
+                axs[i + 1].set_ylabel(
+                    f"{variable_symbols[variable]} ({variable_units[variable]})"
+                )
+            else:
+                axs[i + 1].set_ylabel(f"{variable_symbols[variable]}")
+            for file_path, value in zip(files_paths, file_values):
+                # print(f"Getting data for {variable} at {power} MW")
+                results = get_average(file_path, start, end, variables)
+                variable, avg, std = results[i]
+                # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
+                # print(f"Plotting {variable} at {power} MW")
+                axs[i + 1].errorbar(
+                    value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+                )
+    else:
+        for i, variable in enumerate(variables):
+            axs[i].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
+                fontsize=10,
+            )
+            axs[i].set_xlabel(
+                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+            )
+            axs[i].set_ylabel(
+                f"{variable_symbols[variable]} ({variable_units[variable]})"
+            )
+            for file_path, value in zip(files_paths, file_values):
+                results = get_average(file_path, start, end, variables)
+                variable, avg, std = results[i]
+                axs[i].errorbar(
+                    value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
+                )

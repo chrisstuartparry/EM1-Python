@@ -79,7 +79,7 @@ parameter_symbols = {
     "a": r"$a$",  # Minor Radius of Plasma
     "R0": r"$R_0$",  # Major Radius of Plasma
     "z0": r"$Z_0$",  # Height of Plasma
-    "ip": r"$I_{\mathrm{plasma}}$",
+    "Ip": r"$I_{\mathrm{plasma}}$",
     "Nbar": r"$\bar{N}$",
     "NBI": r"$P_{\mathrm{NBI}}$",
 }
@@ -89,7 +89,7 @@ parameter_meanings = {
     "a": "Minor Radius of Plasma",
     "R0": "Major Radius of Plasma",
     "z0": "Height of Plasma",
-    "ip": "Plasma Current",
+    "Ip": "Plasma Current",
     "Nbar": "Line averaged electron density",
     "NBI": "NBI Input Power",
 }
@@ -99,7 +99,7 @@ parameter_units = {
     "a": r"\unit{\metre}",
     "R0": r"\unit{\metre}",
     "z0": r"\unit{\metre}",
-    "ip": r"\unit{\ampere}",
+    "Ip": r"\unit{\ampere}",
     "Nbar": r"\unit{\per\metre\cubed}",
     "NBI": r"\unit{\mega\watt}",
 }
