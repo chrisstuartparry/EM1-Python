@@ -8,8 +8,16 @@ from EM1PythonFunctions import (
     get_variable,
     plot_variable,
     add_headers,
+    get_new_triple_product,
 )
-from EM1PythonDictionaries import variable_symbols, variable_units, variable_meanings
+from EM1PythonDictionaries import (
+    variable_meanings,
+    variable_symbols,
+    variable_units,
+    parameter_meanings,
+    parameter_symbols,
+    parameter_units,
+)
 
 
 chosen_subsection = "zerod"
