@@ -19,7 +19,6 @@ from EM1PythonDictionaries import (
     parameter_units,
 )
 
-plt.rcParams["figure.dpi"] = 150  # Sets the resolution of the figure (dots per inch)
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
     [
@@ -27,7 +26,6 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
     ]
 )
 
-# from matplotlib.widgets import CheckButtons
 
 variables = ["ni0", "tite", "taue", "betap"]
 chosen_subsection = "zerod"
@@ -77,27 +75,40 @@ files_paths = [
 
 
 # Plot the results
-if triple_product:
-    fig, axs = plt.subplots(1, len(variables) + 1, figsize=(18, 6))
-else:
-    fig, axs = plt.subplots(1, len(variables), figsize=(18, 6))
 
+
+nrows = 1
+if triple_product:
+    ncols = len(variables) + 1
+else:
+    ncols = len(variables)
+fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True)
 
 # fig.suptitle(
 #     "Plot of the average of the variables te0, ne0, and taue, recorded on 20/10/22",
 #     fontsize=16,
 # )
 
-# TODO change triple product statement below into a function
-
 
 def plot_averages(
-    files_paths, file_values, variables, start, end, axs, plot_triple_product
+    files_paths,
+    file_values,
+    variables,
+    start,
+    end,
+    axs,
+    plot_triple_product,
+    x_parameter,
 ):
     if plot_triple_product:
-        # Add a new subplot for the triple product
-        axs[0].set_title("Triple Product")
-        axs[0].set_xlabel("Power (MW)")
+
+        axs[0].set_title(
+            f"{variable_meanings['nimtimtaue']} vs. {parameter_symbols[x_parameter]}",
+            fontsize=10,
+        )
+        axs[0].set_xlabel(
+            f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+        )
         axs[0].set_ylabel(
             f'{variable_symbols["nimtimtaue"]} ({variable_units["nimtimtaue"]})'
         )
@@ -108,9 +119,19 @@ def plot_averages(
                 value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
             )
         for i, variable in enumerate(variables):
-            axs[i + 1].set_title(variable)
-            axs[i + 1].set_xlabel("Power (MW)")
-            axs[i + 1].set_ylabel(variable)
+            axs[i + 1].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
+                fontsize=10,
+            )
+            axs[i + 1].set_xlabel(
+                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+            )
+            if variable_units[variable] != "":
+                axs[i + 1].set_ylabel(
+                    f"{variable_symbols[variable]} ({variable_units[variable]})"
+                )
+            else:
+                axs[i + 1].set_ylabel(f"{variable_symbols[variable]}")
             for file_path, value in zip(files_paths, file_values):
                 # print(f"Getting data for {variable} at {power} MW")
                 results = get_average(file_path, start, end, variables)
@@ -122,9 +143,16 @@ def plot_averages(
                 )
     else:
         for i, variable in enumerate(variables):
-            axs[i].set_title(variable)
-            axs[i].set_xlabel("Power (MW)")
-            axs[i].set_ylabel(variable)
+            axs[i].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
+                fontsize=10,
+            )
+            axs[i].set_xlabel(
+                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+            )
+            axs[i].set_ylabel(
+                f"{variable_symbols[variable]} ({variable_units[variable]})"
+            )
             for file_path, value in zip(files_paths, file_values):
                 # print(f"Getting data for {variable} at {power} MW")
                 results = get_average(file_path, start, end, variables)
@@ -137,9 +165,16 @@ def plot_averages(
 
 
 plot_averages(
-    files_paths, file_values, variables, start, end, axs, plot_triple_product=True
+    files_paths,
+    file_values,
+    variables,
+    start,
+    end,
+    axs,
+    plot_triple_product=True,
+    x_parameter="NBI",
 )
-fig.tight_layout()
+
 if save_graph:
     plt.savefig(fig_file, dpi=500)
 plt.show()

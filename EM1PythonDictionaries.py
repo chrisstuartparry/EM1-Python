@@ -13,7 +13,7 @@ variable_symbols = {
     "ni0": r"$n_{i(0)}$",
     "te0": r"$T_{e(0)}$",
     "tem": r"$\bar{T}_e$",
-    "tite": r"$\frac{T_i}{T_e}",
+    "tite": r"$\frac{T_i}{T_e}$",
     "pfus": r"$P_{\mathrm{fusion}}$",
     "sext": r"$S_{\mathrm{external}}$",
     "vp": r"$V_{\mathrm{plasma}}$",
@@ -38,14 +38,14 @@ variable_meanings = {
     "ne0": "Central electron density",
     "ni0": "Central ion density",
     "te0": "Central electron temperature",
-    "tite": "Volume averaged ratio of ion temperature over electron temperature",
+    "tite": "Ratio of ion to electron temperature",
     "tem": "Volume averaged electron temperature",
     "pfus": "Total D-T Fusion power carried by alpha particles",
     "sext": "External Plasma Surface",
     "vp": "Plasma Volume",
     "W": "Total Plasma Energy",
-    "ni0titetaue": "nTtau (central ion density, ratio of volume averaged ion temperature over electron temperature)",  # This is a custom variable
-    "nimtimtaue": "nTtau (mean ion density, mean ion temperature)",
+    "ni0titetaue": "nTtau (old)",  # This is a custom variable
+    "nimtimtaue": "nTtau",  # This is a custom variable
 }
 
 variable_units = {
@@ -91,7 +91,7 @@ parameter_meanings = {
     "z0": "Height of Plasma",
     "ip": "Plasma Current",
     "Nbar": "Line averaged electron density",
-    "NBI": "NBI Power injected into plasma",
+    "NBI": "NBI Input Power",
 }
 
 parameter_units = {
@@ -101,5 +101,5 @@ parameter_units = {
     "z0": r"\unit{\metre}",
     "ip": r"\unit{\ampere}",
     "Nbar": r"\unit{\per\metre\cubed}",
-    "NBI": r"\unit{\watt}",
+    "NBI": r"\unit{\mega\watt}",
 }
