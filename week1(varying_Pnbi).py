@@ -28,7 +28,7 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 )
 
 
-variables = ["ni0", "tite", "taue", "betap"]
+variables = ["ni0", "taue", "betan", "modeh", "q95"]
 chosen_subsection = "zerod"
 triple_product = True
 start = 50
@@ -74,10 +74,10 @@ else:
     ncols = len(variables)
 fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True)
 
-# fig.suptitle(
-#     "Plot of the average of the variables te0, ne0, and taue, recorded on 20/10/22",
-#     fontsize=16,
-# )
+fig.suptitle(
+    f"Averages vs. {parameter_meanings['NBI']}",
+    fontsize=10,
+)
 
 
 plot_averages(
