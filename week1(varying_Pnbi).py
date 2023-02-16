@@ -28,7 +28,8 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 )
 
 
-variables = ["ni0", "taue", "betan", "modeh", "qeff"]
+# variables = ["ni0", "taue", "betan", "modeh", "qeff"]
+variables = ["ni0", "taue", "tite", "tem"]
 chosen_subsection = "zerod"
 triple_product = True
 start = 50
