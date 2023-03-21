@@ -19,8 +19,9 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 )
 
 chosen_subsection = "zerod"
-variables = ["taue", "betan", "modeh", "qeff"]
+# variables = ["taue", "betan", "modeh", "qeff"]
 # variables = ["taue", "q0", "q95", "qeff"]
+variables = ["modeh", "pnbi", "pnbi_th"]
 
 start = 50
 end = 100
