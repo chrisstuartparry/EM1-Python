@@ -6,6 +6,7 @@ from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
     variable_units,
+    variable_yticks,
     parameter_meanings,
     parameter_symbols,
     parameter_units,
@@ -67,7 +68,7 @@ def get_new_triple_product(file_path, start, end):
         progenitor_results_mean,
         progenitor_results_std,
     ]
-    remaining_triple_product_variables = ["ni0", "taue"]
+    remaining_triple_product_variables = ["nim", "taue"]
     results = []
     for variable in remaining_triple_product_variables:
         a = full_dataset["post"]["zerod"][0][0][variable][0][0]
@@ -116,7 +117,10 @@ def plot_variable(
             results = get_variable(file_path, variables)
             variable, ydata = results[j]
             ax.plot(times, ydata, ".", color="black")
+            if variable == "modeh":
+                ax.set_yticks(variable_yticks[variable])
             ax.set_xlabel(f'{variable_symbols["temps"]} ({variable_units["temps"]})')
+
         if row_header_yesno:
             row_headers.append(f"{first_file_values[i]}MW to {last_file_values[i]}MW")
     return row_headers
