@@ -1,4 +1,4 @@
-import scipy.io
+import scipy.io as sio
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,7 +15,7 @@ from EM1PythonDictionaries import (
 
 
 def get_variable(file_path, variables, chosen_subsection="zerod"):
-    full_dataset = scipy.io.loadmat(file_path)
+    full_dataset = sio.loadmat(file_path)
     results = []
     for variable in variables:
         a = full_dataset["post"][chosen_subsection][0][0][variable][0][0]
@@ -25,7 +25,7 @@ def get_variable(file_path, variables, chosen_subsection="zerod"):
 
 
 def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
-    full_dataset = scipy.io.loadmat(file_path)
+    full_dataset = sio.loadmat(file_path)
     results = []
     for variable in variables:
         a = full_dataset["post"][chosen_subsection][0][0][variable][0][0]
@@ -37,7 +37,7 @@ def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
 
 
 def get_triple_product(file_path, start, end):
-    full_dataset = scipy.io.loadmat(file_path)
+    full_dataset = sio.loadmat(file_path)
     triple_product_variables = ["ni0", "tite", "taue"]
     results = []
     for variable in triple_product_variables:
@@ -56,7 +56,7 @@ def get_triple_product(file_path, start, end):
 
 
 def get_new_triple_product(file_path, start, end):
-    full_dataset = scipy.io.loadmat(file_path)
+    full_dataset = sio.loadmat(file_path)
     progenitor_variables = ["tite", "tem"]
     # multiply ti/te by te to get ti:
     progenitor_results_raw = get_variable(file_path, progenitor_variables)
