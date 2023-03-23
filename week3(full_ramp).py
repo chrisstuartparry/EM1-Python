@@ -25,9 +25,6 @@ variables = ["modeh", "pnbi", "pnbi_th"]
 
 start = 50
 end = 100
-save_graph = False
-if save_graph:
-    fig_file = input("Enter the name of the file to save the graph to: ")
 
 base_path = "EM1 Data/8th Run Data (fast mode)"
 file_name_template = (
@@ -65,6 +62,4 @@ row_headers = plot_variable(
 add_headers(fig, row_headers=row_headers)
 
 
-if save_graph:
-    plt.savefig(fig_file, dpi=500)
 plt.show()

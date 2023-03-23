@@ -26,9 +26,7 @@ chosen_subsection = "zerod"
 variables = ["taue", "betan", "modeh", "qeff"]
 start = 50
 end = 100
-save_graph = False
-if save_graph:
-    fig_file = input("Enter the name of the file to save the graph to: ")
+
 # select a file to import
 files_paths = [askopenfilename()]
 file_value = 2

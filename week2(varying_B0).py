@@ -32,9 +32,7 @@ chosen_subsection = "zerod"
 triple_product = True
 start = 50
 end = 100
-save_graph = False
-if save_graph:
-    fig_file = input("Enter the name of the file to save the graph to: ")
+
 
 base_path = "EM1 Data/4th Run Data (fast mode)"
 file_name_template = "2023-01-27 NBI Power 2MW B0 {B0_value}T.mat"
@@ -63,6 +61,5 @@ plot_averages(
     x_parameter="b0",
 )
 
-if save_graph:
-    plt.savefig(fig_file, dpi=500)
+
 plt.show()
