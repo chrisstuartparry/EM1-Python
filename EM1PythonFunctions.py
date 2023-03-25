@@ -8,6 +8,7 @@ from EM1PythonDictionaries import (
     variable_symbols,
     variable_units,
     variable_yticks,
+    variables_list,
     parameter_meanings,
     parameter_symbols,
     parameter_units,
