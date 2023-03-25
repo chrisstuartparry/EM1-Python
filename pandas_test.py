@@ -39,9 +39,9 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
     return df
 
 
-default_index_dataframe = mat_to_DataFrame(
-    "EM1 Data/4th Run Data (fast mode)/2023-01-27 NBI Power 2MW B0 0.1T.mat"
-)
+file_path = "EM1 Data/4th Run Data (fast mode)/2023-01-27 NBI Power 2MW B0 0.1T.mat"
+
+default_index_dataframe = mat_to_DataFrame(file_path)
 temps_index_dataframe = default_index_dataframe.set_index("temps")
 # print(temps_index_dataframe)
 
@@ -49,7 +49,12 @@ for column in temps_index_dataframe.columns:
     if column not in variables_list:
         temps_index_dataframe.drop(column, axis=1, inplace=True)
 
+temps_index_dataframe["tim"] = (
+    temps_index_dataframe["tite"] * temps_index_dataframe["tem"]
+)
 
-# print(temps_index_dataframe)
-
-# TODO Add nttau to the list of variables
+temps_index_dataframe["nTtau"] = (
+    temps_index_dataframe["nim"]
+    * temps_index_dataframe["tim"]
+    * temps_index_dataframe["taue"]
+)
