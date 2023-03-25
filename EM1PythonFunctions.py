@@ -25,7 +25,7 @@ def get_variable(file_path, variables, chosen_subsection="zerod"):
     return results
 
 
-def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
+def get_average(file_path, variables, chosen_subsection="zerod", start=50, end=100):
     full_dataset = sio.loadmat(file_path)
     results = []
     for variable in variables:
@@ -37,7 +37,7 @@ def get_average(file_path, start, end, variables, chosen_subsection="zerod"):
     return results
 
 
-def get_triple_product(file_path, start, end):
+def get_triple_product(file_path, start=50, end=100):
     full_dataset = sio.loadmat(file_path)
     triple_product_variables = ["ni0", "tite", "taue"]
     results = []
@@ -56,7 +56,7 @@ def get_triple_product(file_path, start, end):
     return ["triple_product", triple_product_avg, triple_product_std]
 
 
-def get_new_triple_product(file_path, start, end):
+def get_new_triple_product(file_path, start=50, end=100):
     full_dataset = sio.loadmat(file_path)
     progenitor_variables = ["tite", "tem"]
     # multiply ti/te by te to get ti:
@@ -190,11 +190,11 @@ def plot_averages(
     files_paths,
     file_values,
     variables,
-    start,
-    end,
     axs,
     plot_triple_product,
     x_parameter,
+    start=50,
+    end=100,
 ):
     if plot_triple_product:
         axs[0].set_title(
@@ -229,7 +229,7 @@ def plot_averages(
                 axs[i + 1].set_ylabel(f"{variable_symbols[variable]}")
             for file_path, value in zip(files_paths, file_values):
                 # print(f"Getting data for {variable} at {power} MW")
-                results = get_average(file_path, start, end, variables)
+                results = get_average(file_path, variables)
                 variable, avg, std = results[i]
                 # print("Average: ", avg, "Standard Deviation: ", std, "Variable: ", variable)
                 # print(f"Plotting {variable} at {power} MW")
@@ -249,7 +249,7 @@ def plot_averages(
                 f"{variable_symbols[variable]} ({variable_units[variable]})"
             )
             for file_path, value in zip(files_paths, file_values):
-                results = get_average(file_path, start, end, variables)
+                results = get_average(file_path, variables)
                 variable, avg, std = results[i]
                 axs[i].errorbar(
                     value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5

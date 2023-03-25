@@ -32,8 +32,6 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 variables = ["ni0", "taue", "tite", "tem"]
 chosen_subsection = "zerod"
 triple_product = True
-start = 50
-end = 100
 
 
 # load the data
@@ -83,8 +81,6 @@ plot_averages(
     files_paths,
     file_values,
     variables,
-    start,
-    end,
     axs,
     plot_triple_product=True,
     x_parameter="NBI",
