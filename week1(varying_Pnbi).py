@@ -30,13 +30,8 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 
 # variables = ["ni0", "taue", "betan", "modeh", "qeff"]
 variables = ["ni0", "taue", "tite", "tem"]
-chosen_subsection = "zerod"
-triple_product = True
-
 
 # load the data
-
-
 base_path = "EM1 Data/3rd Run Data (fast mode)"
 file_name_template = "2023-01-25 NBI Power {NBI_power}MW.mat"
 file_values = [
@@ -64,18 +59,24 @@ files_paths = [
 ]
 
 
-nrows = 1
-if triple_product:
-    ncols = len(variables) + 1
-else:
-    ncols = len(variables)
-fig, axs = plt.subplots(nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True)
+def generate_fig_and_axs(variables, triple_product=True):
+    nrows = 1
+    if triple_product:
+        ncols = len(variables) + 1
+    else:
+        ncols = len(variables)
+    fig, axs = plt.subplots(
+        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
+    )
+    return fig, axs
+
+
+fig, axs = generate_fig_and_axs(variables)
 
 fig.suptitle(
     f"Averages vs. {parameter_meanings['NBI']}",
     fontsize=10,
 )
-
 
 plot_averages(
     files_paths,
@@ -85,6 +86,5 @@ plot_averages(
     plot_triple_product=True,
     x_parameter="NBI",
 )
-
 
 plt.show()
