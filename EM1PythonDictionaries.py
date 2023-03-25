@@ -84,6 +84,8 @@ variable_yticks = {
     "modeh": [0, 1],
 }
 
+variables_list = list(variable_symbols.keys())
+
 parameter_symbols = {
     "b0": r"$B_0$",  # Toroidal Magnetic Field
     "a": r"$a$",  # Minor Radius of Plasma
