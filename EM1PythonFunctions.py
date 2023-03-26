@@ -254,3 +254,34 @@ def plot_averages(
                 axs[i].errorbar(
                     value, avg, yerr=std, fmt=".", color="black", elinewidth=0.5
                 )
+
+
+def generate_fig_and_axs(variables, parameter_name, triple_product=True):
+    nrows = 1
+    if triple_product:
+        ncols = len(variables) + 1
+    else:
+        ncols = len(variables)
+    fig, axs = plt.subplots(
+        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
+    )
+    fig.suptitle(
+        f"Averages vs. {parameter_meanings[parameter_name]}",
+        fontsize=10,
+    )
+    return fig, axs
+
+
+def show_plot_averages(
+    files_paths, file_values, variables, parameter_name, triple_product=True
+):
+    fig, axs = generate_fig_and_axs(variables, parameter_name, triple_product)
+    plot_averages(
+        files_paths,
+        file_values,
+        variables,
+        axs,
+        plot_triple_product=triple_product,
+        x_parameter=parameter_name,
+    )
+    plt.show()

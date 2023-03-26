@@ -2,15 +2,7 @@ import scipy.io as sio
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from EM1PythonFunctions import (
-    get_average,
-    get_triple_product,
-    get_variable,
-    plot_variable,
-    add_headers,
-    get_new_triple_product,
-    plot_averages,
-)
+from EM1PythonFunctions import show_plot_averages
 from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
@@ -59,49 +51,4 @@ files_paths = [
 ]
 
 
-def generate_fig_and_axs(variables, parameter_name, triple_product=True):
-    nrows = 1
-    if triple_product:
-        ncols = len(variables) + 1
-    else:
-        ncols = len(variables)
-    fig, axs = plt.subplots(
-        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
-    )
-    fig.suptitle(
-        f"Averages vs. {parameter_meanings[parameter_name]}",
-        fontsize=10,
-    )
-    return fig, axs
-
-
-def show_plot_averages(
-    files_paths, file_values, variables, parameter_name, triple_product=True
-):
-    fig, axs = generate_fig_and_axs(variables, parameter_name, triple_product)
-    plot_averages(
-        files_paths,
-        file_values,
-        variables,
-        axs,
-        plot_triple_product=triple_product,
-        x_parameter=parameter_name,
-    )
-    plt.show()
-
-
 show_plot_averages(files_paths, file_values, variables, "NBI")
-
-# fig, axs = generate_fig_and_axs(variables, "NBI")
-
-
-# plot_averages(
-#     files_paths,
-#     file_values,
-#     variables,
-#     axs,
-#     plot_triple_product=True,
-#     x_parameter="NBI",
-# )
-
-# plt.show()
