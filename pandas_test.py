@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import os
 import tkinter as tk
 import tkinter.filedialog as fd
+from EM1PythonFunctions import show_plot_averages
 from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
@@ -60,8 +61,6 @@ def load_data_into_dataframe(file_path):
 
     return temps_index_dataframe
 
-
-# file_path = "EM1 Data/4th Run Data (fast mode)/2023-01-27 NBI Power 2MW B0 0.1T.mat"
 
 
 class FilePathListGenerator:
@@ -176,3 +175,13 @@ full_ramp_dataframes_dictionary = {
         full_ramp_file_paths, full_ramp_dataframes
     )
 }
+
+variables = ["ni0", "taue", "tite", "tem"]
+def get_averages(dataframes_list, variables, start=50, end=100):
+    for dataframe in dataframes_list:
+        for variable in variables:
+            dataframe[variable + "_average"] = dataframe[variable].mean(axis=1)
+            dataframe[variable + "_std"] = dataframe[variable].std(axis=1)
+        
+show_plot_averages()
+lambda dataframe, variable: dataframe[variable].mean(axis=1)
