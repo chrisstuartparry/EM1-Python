@@ -59,7 +59,7 @@ files_paths = [
 ]
 
 
-def generate_fig_and_axs(variables, triple_product=True):
+def generate_fig_and_axs(variables, parameter_name, triple_product=True):
     nrows = 1
     if triple_product:
         ncols = len(variables) + 1
@@ -68,23 +68,40 @@ def generate_fig_and_axs(variables, triple_product=True):
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
+    fig.suptitle(
+        f"Averages vs. {parameter_meanings[parameter_name]}",
+        fontsize=10,
+    )
     return fig, axs
 
 
-fig, axs = generate_fig_and_axs(variables)
+def show_plot_averages(
+    files_paths, file_values, variables, parameter_name, triple_product=True
+):
+    fig, axs = generate_fig_and_axs(variables, parameter_name, triple_product)
+    plot_averages(
+        files_paths,
+        file_values,
+        variables,
+        axs,
+        plot_triple_product=triple_product,
+        x_parameter=parameter_name,
+    )
+    plt.show()
 
-fig.suptitle(
-    f"Averages vs. {parameter_meanings['NBI']}",
-    fontsize=10,
-)
 
-plot_averages(
-    files_paths,
-    file_values,
-    variables,
-    axs,
-    plot_triple_product=True,
-    x_parameter="NBI",
-)
+show_plot_averages(files_paths, file_values, variables, "NBI")
 
-plt.show()
+# fig, axs = generate_fig_and_axs(variables, "NBI")
+
+
+# plot_averages(
+#     files_paths,
+#     file_values,
+#     variables,
+#     axs,
+#     plot_triple_product=True,
+#     x_parameter="NBI",
+# )
+
+# plt.show()
