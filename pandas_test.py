@@ -133,7 +133,9 @@ def plot_interactive(
             file_path_list_generator.file_values
             for file_path_list_generator in file_path_list_generators
         ],
+        radio.onclicked(update_plot),
     )
+    plt.show()
 
 
 class FilePathListGenerator:
