@@ -22,6 +22,7 @@ variable_symbols = {
     "W": r"$E_{\mathrm{plasma}}$",
     "ni0titetaue": r"$n_{i(0)}\frac{T_i}{T_e}\tau_E$",  # This is a custom variable
     "nimtimtaue": r"$n_{i(m)}T_{i(m)}\tau_E$",  # This is a custom variable
+    "nTtau": r"$bar(n)_i bar(T)_i \tau_E$",  # This is a custom variable
 }
 
 variable_meanings = {
@@ -48,8 +49,9 @@ variable_meanings = {
     "sext": "External Plasma Surface",
     "vp": "Plasma Volume",
     "W": "Total Plasma Energy",
-    "ni0titetaue": "nTtau (old)",  # This is a custom variable
-    "nimtimtaue": "nTtau",  # This is a custom variable
+    "ni0titetaue": "Old Triple Product",  # This is a custom variable
+    "nimtimtaue": "Triple Product",  # This is a custom variable
+    "nTtau": "Triple Product",  # This is a custom variable
 }
 
 variable_units = {
@@ -78,6 +80,7 @@ variable_units = {
     "W": r"\unit{\joule}",
     "ni0titetaue": r"\unit{\second\per\metre\cubed}",  # This is a custom variable
     "nimtimtaue": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable
+    "nTtau": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable
 }
 
 variable_yticks = {
@@ -114,4 +117,11 @@ parameter_units = {
     "Ip": r"\unit{\ampere}",
     "Nbar": r"\unit{\per\metre\cubed}",
     "NBI": r"\unit{\mega\watt}",
+}
+
+respective_variable_for_dataframe = {
+    "pnbi_dataframes": "pnbi",
+    "B0_dataframes": "b0",
+    "Ip_dataframes": "Ip",
+    "nbar_dataframes": "Nbar",
 }
