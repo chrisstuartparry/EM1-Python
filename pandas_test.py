@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 import os
 import tkinter as tk
 import tkinter.filedialog as fd
-from EM1PythonFunctions import show_plot_averages
+from matplotlib.widgets import Slider
+from varname import nameof
+from EM1PythonFunctionsNew import generate_fig_and_axs, get_averages_and_stds
 from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
@@ -15,6 +17,14 @@ from EM1PythonDictionaries import (
     parameter_meanings,
     parameter_symbols,
     parameter_units,
+    respective_variable_for_dataframe,
+)
+
+plt.rcParams["text.usetex"] = True
+plt.rcParams["text.latex.preamble"] = "\n".join(
+    [
+        r"\usepackage{siunitx}",
+    ]
 )
 
 
@@ -62,7 +72,6 @@ def load_data_into_dataframe(file_path):
     return temps_index_dataframe
 
 
-
 class FilePathListGenerator:
     def __init__(self, base_path, file_name_template, file_values):
         self.base_path = base_path
@@ -83,6 +92,31 @@ class FilePathListGenerator:
             root.destroy()
         else:
             return self.generate_file_paths()
+
+    def plot_averages(self, x_parameter, dataframes_list, variables, start=50, end=100):
+        fig, axs = generate_fig_and_axs(variables, x_parameter)
+        averages_and_stds_dict = get_averages_and_stds(dataframes_list, variables)
+        for i, variable in enumerate(variables):
+            axs[i].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
+                fontsize=10,
+            )
+            axs[i].set_xlabel(
+                f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
+            )
+            axs[i].set_ylabel(
+                f"{variable_symbols[variable]} ({variable_units[variable]})"
+            )
+            file_values = self.file_values
+            key = list(file_values[0].keys())[0]
+            x = [item[key] for item in file_values]
+            y = averages_and_stds_dict[variable + "_average"]
+            yerr = averages_and_stds_dict[variable + "_std"]
+            # print("x:", x, type(x))
+            # print("y:", y, type(y))
+            # print("yerr:", yerr, type(yerr))
+            axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
+        plt.show()
 
 
 pnbi_file_path_list_generator = FilePathListGenerator(
@@ -111,10 +145,10 @@ pnbi_file_path_list_generator = FilePathListGenerator(
 )
 pnbi_file_paths = pnbi_file_path_list_generator.get_file_paths(user_decides=False)
 pnbi_dataframes = [load_data_into_dataframe(file_path) for file_path in pnbi_file_paths]
-pnbi_dataframes_dictionary = {
-    os.path.basename(file_path): pnbi_dataframe
-    for file_path, pnbi_dataframe in zip(pnbi_file_paths, pnbi_dataframes)
-}
+# pnbi_dataframes_dictionary = {
+#     os.path.basename(file_path): pnbi_dataframe
+#     for file_path, pnbi_dataframe in zip(pnbi_file_paths, pnbi_dataframes)
+# }
 
 B0_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/4th Run Data (fast mode)",
@@ -125,10 +159,10 @@ B0_file_path_list_generator = FilePathListGenerator(
 )
 B0_file_paths = B0_file_path_list_generator.get_file_paths(user_decides=False)
 B0_dataframes = [load_data_into_dataframe(file_path) for file_path in B0_file_paths]
-B0_dataframes_dictionary = {
-    os.path.basename(file_path): B0_dataframe
-    for file_path, B0_dataframe in zip(B0_file_paths, B0_dataframes)
-}
+# B0_dataframes_dictionary = {
+#     os.path.basename(file_path): B0_dataframe
+#     for file_path, B0_dataframe in zip(B0_file_paths, B0_dataframes)
+# }
 
 Ip_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/5th Run Data (fast mode)/",
@@ -139,10 +173,10 @@ Ip_file_path_list_generator = FilePathListGenerator(
 )
 Ip_file_paths = Ip_file_path_list_generator.get_file_paths(user_decides=False)
 Ip_dataframes = [load_data_into_dataframe(file_path) for file_path in Ip_file_paths]
-Ip_dataframes_dictionary = {
-    os.path.basename(file_path): Ip_dataframe
-    for file_path, Ip_dataframe in zip(Ip_file_paths, Ip_dataframes)
-}
+# Ip_dataframes_dictionary = {
+#     os.path.basename(file_path): Ip_dataframe
+#     for file_path, Ip_dataframe in zip(Ip_file_paths, Ip_dataframes)
+# }
 
 nbar_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/6th Run Data (fast mode)",
@@ -153,10 +187,10 @@ nbar_file_path_list_generator = FilePathListGenerator(
 )
 nbar_file_paths = nbar_file_path_list_generator.get_file_paths(user_decides=False)
 nbar_dataframes = [load_data_into_dataframe(file_path) for file_path in nbar_file_paths]
-nbar_dataframes_dictionary = {
-    os.path.basename(file_path): nbar_dataframe
-    for file_path, nbar_dataframe in zip(nbar_file_paths, nbar_dataframes)
-}
+# nbar_dataframes_dictionary = {
+#     os.path.basename(file_path): nbar_dataframe
+#     for file_path, nbar_dataframe in zip(nbar_file_paths, nbar_dataframes)
+# }
 
 full_ramp_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/8th Run Data (fast mode)",
@@ -169,19 +203,16 @@ full_ramp_file_paths = full_ramp_file_path_list_generator.get_file_paths(
 full_ramp_dataframes = [
     load_data_into_dataframe(file_path) for file_path in full_ramp_file_paths
 ]
-full_ramp_dataframes_dictionary = {
-    os.path.basename(file_path): full_ramp_dataframe
-    for file_path, full_ramp_dataframe in zip(
-        full_ramp_file_paths, full_ramp_dataframes
-    )
-}
+# full_ramp_dataframes_dictionary = {
+#     os.path.basename(file_path): full_ramp_dataframe
+#     for file_path, full_ramp_dataframe in zip(
+#         full_ramp_file_paths, full_ramp_dataframes
+#     )
+# }
 
-variables = ["ni0", "taue", "tite", "tem"]
-def get_averages(dataframes_list, variables, start=50, end=100):
-    for dataframe in dataframes_list:
-        for variable in variables:
-            dataframe[variable + "_average"] = dataframe[variable].mean(axis=1)
-            dataframe[variable + "_std"] = dataframe[variable].std(axis=1)
-        
-show_plot_averages()
-lambda dataframe, variable: dataframe[variable].mean(axis=1)
+variables = ["nTtau", "ni0", "taue", "tite", "tem"]
+
+pnbi_file_path_list_generator.plot_averages("NBI", pnbi_dataframes, variables)
+B0_file_path_list_generator.plot_averages("b0", B0_dataframes, variables)
+Ip_file_path_list_generator.plot_averages("Ip", Ip_dataframes, variables)
+nbar_file_path_list_generator.plot_averages("Nbar", nbar_dataframes, variables)
