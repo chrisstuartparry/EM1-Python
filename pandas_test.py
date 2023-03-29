@@ -2,7 +2,7 @@ import scipy.io as sio
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from EM1PythonFunctionsNew import plot_all4, load_data_into_dataframe
+from EM1PythonFunctionsNew import plot_all, load_data_into_dataframe
 from EM1PythonDictionaries import (
     variables_list,
 )
@@ -93,6 +93,7 @@ full_ramp_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/8th Run Data (fast mode)",
     file_name_template=("2023-02-03 NBI Ramping 0 to {last_pnbi_value}MW.mat"),
     file_values=[{"last_pnbi_value": value} for value in np.array(range(2, 11, 2))],
+    ramping=True,
 )
 full_ramp_file_paths = full_ramp_file_path_list_generator.get_file_paths(
     user_decides=False
@@ -114,6 +115,7 @@ file_path_list_generators_to_plot = [
     B0_file_path_list_generator,
     Ip_file_path_list_generator,
     nbar_file_path_list_generator,
+    full_ramp_file_path_list_generator,
 ]
 
 dataframes_lists_to_plot = [
@@ -121,6 +123,7 @@ dataframes_lists_to_plot = [
     B0_dataframes,
     Ip_dataframes,
     nbar_dataframes,
+    full_ramp_dataframes,
 ]
 
-plot_all4(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
+plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)

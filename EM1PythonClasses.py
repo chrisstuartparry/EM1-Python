@@ -5,10 +5,11 @@ from varname import nameof
 
 
 class FilePathListGenerator:
-    def __init__(self, base_path, file_name_template, file_values):
+    def __init__(self, base_path, file_name_template, file_values, ramping=False):
         self.base_path = base_path
         self.file_name_template = file_name_template
         self.file_values = file_values
+        self.ramping = ramping
 
     def generate_file_paths(self):
         return [
