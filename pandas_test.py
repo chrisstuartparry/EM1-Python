@@ -85,7 +85,7 @@ def plot_interactive(
         ):
             visible = file_path_list_generator.base_path == label
             for axs in axs_group:
-                for ax in axs:
+                for ax in axs.flat:
                     ax.set_visible(visible)
         plt.draw()
 
@@ -125,7 +125,6 @@ def plot_interactive(
     for ax in axs_groups[0][1]:
         ax.set_visible(True)
 
-    # Create the radio button widget
     ax_radio = plt.axes([0.05, 0.4, 0.1, 0.15])
     radio = RadioButtons(
         ax_radio,
@@ -133,8 +132,8 @@ def plot_interactive(
             file_path_list_generator.file_values
             for file_path_list_generator in file_path_list_generators
         ],
-        radio.onclicked(update_plot),
     )
+    radio.on_clicked(update_plot),
     plt.show()
 
 
