@@ -2,9 +2,7 @@ import scipy.io as sio
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from EM1PythonFunctionsNew import (
-    plot_averages,
-)
+from EM1PythonFunctionsNew import plot_all4, load_data_into_dataframe
 from EM1PythonDictionaries import (
     variables_list,
 )
@@ -16,60 +14,6 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
         r"\usepackage{siunitx}",
     ]
 )
-
-
-def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="zerod"):
-    mat_data = sio.loadmat(file_path)
-    structure = mat_data[chosen_structure]
-    substructure = structure[chosen_substructure][0, 0]
-
-    # Create a dictionary of the field names and corresponding data, one for arrays and one for scalars
-
-    array_data_dict = {}
-    scalar_data_dict = {}
-    for field_name in substructure.dtype.names:
-        field_data = substructure[field_name][0, 0]
-        if field_data.size == 1:
-            scalar_data_dict[field_name] = field_data[0]
-        else:
-            array_data_dict[field_name] = field_data.squeeze()
-
-    # Convert the array dictionary to a pandas DataFrame, and the scalar data to a pandas Series
-    df = pd.DataFrame(array_data_dict)
-    series = pd.Series(scalar_data_dict)
-
-    return df
-
-
-def load_data_into_dataframe(file_path):
-    default_index_dataframe = mat_to_DataFrame(file_path)
-    temps_index_dataframe = default_index_dataframe.set_index("temps")
-
-    for column in temps_index_dataframe.columns:
-        if column not in variables_list:
-            temps_index_dataframe.drop(column, axis=1, inplace=True)
-
-    temps_index_dataframe["tim"] = (
-        temps_index_dataframe["tite"] * temps_index_dataframe["tem"]
-    )
-
-    temps_index_dataframe["nTtau"] = (
-        temps_index_dataframe["nim"]
-        * temps_index_dataframe["tim"]
-        * temps_index_dataframe["taue"]
-    )
-
-    return temps_index_dataframe
-
-
-def plot_all4(file_path_list_generators, dataframes_lists, variables):
-    for file_path_list_generator, dataframes_list in zip(
-        file_path_list_generators, dataframes_lists
-    ):
-        x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
-        print("x_parameter: ", x_parameter)
-        plot_averages(file_path_list_generator, x_parameter, dataframes_list, variables)
-    plt.show()
 
 
 pnbi_file_path_list_generator = FilePathListGenerator(
@@ -165,16 +109,6 @@ full_ramp_dataframes = [
 
 variables = ["nTtau", "ni0", "taue", "tite", "tem"]
 
-# pnbi_file_path_list_generator.plot_averages("NBI", pnbi_dataframes, variables)
-# B0_file_path_list_generator.plot_averages("b0", B0_dataframes, variables)
-# Ip_file_path_list_generator.plot_averages("Ip", Ip_dataframes, variables)
-# nbar_file_path_list_generator.plot_averages("Nbar", nbar_dataframes, variables)
-
-# plot_interactive(pnbi_file_path_list_generator, pnbi_dataframes, variables)
-# plot_interactive(B0_file_path_list_generator, B0_dataframes, variables)
-# plot_interactive(Ip_file_path_list_generator, Ip_dataframes, variables)
-# plot_interactive(nbar_file_path_list_generator, nbar_dataframes, variables)
-
 file_path_list_generators_to_plot = [
     pnbi_file_path_list_generator,
     B0_file_path_list_generator,
@@ -188,7 +122,5 @@ dataframes_lists_to_plot = [
     Ip_dataframes,
     nbar_dataframes,
 ]
-
-x_parameters = ["pnbi", "b0", "Ip", "Nbar"]
 
 plot_all4(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
