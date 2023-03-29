@@ -1,7 +1,3 @@
-import scipy.io as sio
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
 import tkinter as tk
 import tkinter.filedialog as fd
@@ -26,5 +22,6 @@ class FilePathListGenerator:
             root.withdraw()
             file_paths = fd.askopenfilenames(parent=root, title="Choose file(s)")
             root.destroy()
+            return file_paths
         else:
             return self.generate_file_paths()

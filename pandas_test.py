@@ -2,26 +2,11 @@ import scipy.io as sio
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
-import tkinter as tk
-import tkinter.filedialog as fd
-from varname import nameof
 from EM1PythonFunctionsNew import (
-    generate_fig_and_axs,
-    get_averages_and_stds,
     plot_averages,
-    # plot_interactive,
 )
 from EM1PythonDictionaries import (
-    variable_meanings,
-    variable_symbols,
-    variable_units,
-    variable_yticks,
     variables_list,
-    parameter_meanings,
-    parameter_symbols,
-    parameter_units,
-    respective_variable_for_dataframe,
 )
 from EM1PythonClasses import FilePathListGenerator
 
