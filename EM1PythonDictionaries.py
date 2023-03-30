@@ -22,7 +22,7 @@ variable_symbols = {
     "W": r"$E_{\mathrm{plasma}}$",
     "ni0titetaue": r"$n_{i(0)}\frac{T_i}{T_e}\tau_E$",  # This is a custom variable
     "nimtimtaue": r"$n_{i(m)}T_{i(m)}\tau_E$",  # This is a custom variable
-    "nTtau": r"$bar(n)_i bar(T)_i \tau_E$",  # This is a custom variable
+    "nTtau": r"$\bar{n}_i \bar{T}_i \tau_E$",  # This is a custom variable
 }
 
 variable_meanings = {
@@ -42,9 +42,9 @@ variable_meanings = {
     "ne0": "Central electron density",
     "ni0": "Central ion density",
     "nim": "Sum of V.Avg. Ion Densities",
-    "te0": "Central electron temperature",
-    "tite": "Ratio of ion to electron temperature",
-    "tem": "Volume averaged electron temperature",
+    "te0": "Central electron temp.",
+    "tite": "Ratio of ion to e- temp.",
+    "tem": "Volume avg. e- temp.",
     "pfus": "Alpha D-T Fusion Power",
     "sext": "External Plasma Surface",
     "vp": "Plasma Volume",
