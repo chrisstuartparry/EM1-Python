@@ -2,11 +2,15 @@ import scipy.io as sio
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
+import cProfile, pstats
 from EM1PythonFunctionsNew import plot_all, load_data_into_dataframe
 from EM1PythonDictionaries import (
     variables_list,
 )
 from EM1PythonClasses import FilePathListGenerator
+
+start_time = datetime.now()
 
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -126,4 +130,10 @@ dataframes_lists_to_plot = [
     full_ramp_dataframes,
 ]
 
-plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
+# plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
+# pstats.Stats(
+#     cProfile.Profile().run(
+#         "plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)"
+#     )
+# ).strip_dirs().sort_stats(pstats.SortKey.CUMULATIVE).print_stats(20)
+print(f"Done in {datetime.now() - start_time}")

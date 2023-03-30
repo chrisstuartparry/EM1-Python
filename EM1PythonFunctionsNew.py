@@ -141,7 +141,7 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
             raise ValueError(
                 "file_path_list_generator ramping attribute must be True or False"
             )
-    plt.show()
+    plt.show(block=False)
 
 
 def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
