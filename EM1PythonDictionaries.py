@@ -9,6 +9,7 @@ variable_symbols = {
     "pnbi": r"$P_{\mathrm{NBI input}}$",
     "frnbi": r"$P_{\mathrm{NBI frac}}$",
     "pnbi_th": r"$P_{\mathrm{NBI thermal}}$",
+    "ip": r"$I_{\mathrm{plasma}}$",
     "betap": r"$\beta_{\mathrm{P}}$",
     "ne0": r"$n_{e(0)}$",
     "ni0": r"$n_{i(0)}$",
@@ -94,9 +95,10 @@ parameter_symbols = {
     "a": r"$a$",  # Minor Radius of Plasma
     "R0": r"$R_0$",  # Major Radius of Plasma
     "z0": r"$Z_0$",  # Height of Plasma
-    "Ip": r"$I_{\mathrm{plasma}}$",
-    "Nbar": r"$\bar{N}$",
-    "NBI": r"$P_{\mathrm{NBI}}$",
+    "ip": r"$I_{\mathrm{plasma}}$",
+    "nbar": r"$\bar{N}$",
+    "nim": r"$N_{i(m)}$",
+    "pnbi": r"$P_{\mathrm{NBI}}$",
 }
 
 parameter_meanings = {
@@ -104,9 +106,10 @@ parameter_meanings = {
     "a": "Minor Radius of Plasma",
     "R0": "Major Radius of Plasma",
     "z0": "Height of Plasma",
-    "Ip": "Plasma Current",
-    "Nbar": "Line averaged electron density",
-    "NBI": "NBI Input Power",
+    "ip": "Plasma Current",
+    "nbar": "Line averaged electron density",
+    "nim": "Sum of V.Avg. Ion Densities",
+    "pnbi": "NBI Power",
 }
 
 parameter_units = {
@@ -114,14 +117,15 @@ parameter_units = {
     "a": r"\unit{\metre}",
     "R0": r"\unit{\metre}",
     "z0": r"\unit{\metre}",
-    "Ip": r"\unit{\ampere}",
-    "Nbar": r"\unit{\per\metre\cubed}",
-    "NBI": r"\unit{\mega\watt}",
+    "ip": r"\unit{\ampere}",
+    "nbar": r"\unit{\per\metre\cubed}",
+    "nim": r"\unit{\per\metre\cubed}",
+    "pnbi": r"\unit{\mega\watt}",
 }
 
 respective_variable_for_dataframe = {
     "pnbi_dataframes": "pnbi",
     "B0_dataframes": "b0",
-    "Ip_dataframes": "Ip",
-    "nbar_dataframes": "Nbar",
+    "Ip_dataframes": "ip",
+    "nbar_dataframes": "nbar",
 }

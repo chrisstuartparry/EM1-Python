@@ -22,9 +22,9 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 
 pnbi_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/3rd Run Data (fast mode)",
-    file_name_template="2023-01-25 NBI Power {NBI}MW.mat",
+    file_name_template="2023-01-25 NBI Power {pnbi}MW.mat",
     file_values=[
-        {"NBI": value}
+        {"pnbi": value}
         for value in [
             0,
             0.25,
@@ -67,9 +67,9 @@ B0_dataframes = [load_data_into_dataframe(file_path) for file_path in B0_file_pa
 
 Ip_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/5th Run Data (fast mode)/",
-    file_name_template="2023-01-31 NBI Power 2MW Ip {Ip}MA.mat",
+    file_name_template="2023-01-31 NBI Power 2MW Ip {ip}MA.mat",
     file_values=[
-        {"Ip": value} for value in (np.array(range(1, 51, 1), dtype=float) / 10)
+        {"ip": value} for value in (np.array(range(1, 51, 1), dtype=float) / 10)
     ],
 )
 Ip_file_paths = Ip_file_path_list_generator.get_file_paths(user_decides=False)
@@ -81,9 +81,9 @@ Ip_dataframes = [load_data_into_dataframe(file_path) for file_path in Ip_file_pa
 
 nbar_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/6th Run Data (fast mode)",
-    file_name_template="2023-01-31 NBI Power 2MW nbar {Nbar}.mat",
+    file_name_template="2023-01-31 NBI Power 2MW nbar {nim}.mat",
     file_values=[
-        {"Nbar": value} for value in (np.array(range(1, 41, 1), dtype=float) / 10)
+        {"nim": value} for value in (np.array(range(1, 41, 1), dtype=float) / 10)
     ],
 )
 nbar_file_paths = nbar_file_path_list_generator.get_file_paths(user_decides=False)
@@ -95,8 +95,8 @@ nbar_dataframes = [load_data_into_dataframe(file_path) for file_path in nbar_fil
 
 full_ramp_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/8th Run Data (fast mode)",
-    file_name_template=("2023-02-03 NBI Ramping 0 to {last_pnbi_value}MW.mat"),
-    file_values=[{"last_pnbi_value": value} for value in np.array(range(2, 11, 2))],
+    file_name_template=("2023-02-03 NBI Ramping 0 to {pnbi}MW.mat"),
+    file_values=[{"pnbi": value} for value in np.array(range(2, 11, 2))],
     ramping=True,
 )
 full_ramp_file_paths = full_ramp_file_path_list_generator.get_file_paths(
@@ -130,7 +130,7 @@ dataframes_lists_to_plot = [
     full_ramp_dataframes,
 ]
 
-# plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
+plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
 # pstats.Stats(
 #     cProfile.Profile().run(
 #         "plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)"

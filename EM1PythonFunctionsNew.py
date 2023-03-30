@@ -79,7 +79,7 @@ def generate_fig_and_axs(variables, parameter_name):
     return fig, axs
 
 
-def get_averages_and_stds(dataframes_list, variables, start=50, end=100):
+def get_averages_and_stds(dataframes_list, x_parameter, variables, start=50, end=100):
     averages_and_stds = {}
     for variable in variables:
         variable_averages = [
@@ -90,6 +90,17 @@ def get_averages_and_stds(dataframes_list, variables, start=50, end=100):
         ]
         averages_and_stds[variable + "_average"] = variable_averages
         averages_and_stds[variable + "_std"] = variable_stds
+    if x_parameter != "b0":
+        x_parameter_average = [
+            dataframe[x_parameter].iloc[start:end].mean()
+            for dataframe in dataframes_list
+        ]
+        x_parameter_std = [
+            dataframe[x_parameter].iloc[start:end].std()
+            for dataframe in dataframes_list
+        ]
+        averages_and_stds[x_parameter + "_average"] = x_parameter_average
+        averages_and_stds[x_parameter + "_std"] = x_parameter_std
     return averages_and_stds
 
 
@@ -98,7 +109,7 @@ def plot_averages(
 ):
     fig, axs = generate_fig_and_axs(variables, x_parameter)
     averages_and_stds_dict = get_averages_and_stds(
-        dataframes_list, variables, start, end
+        dataframes_list, x_parameter, variables, start, end
     )
     for i, variable in enumerate(variables):
         axs[i].set_title(
@@ -109,9 +120,15 @@ def plot_averages(
             f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
         )
         axs[i].set_ylabel(f"{variable_symbols[variable]} ({variable_units[variable]})")
-        file_values = file_path_list_generator.file_values
-        key = list(file_values[0].keys())[0]
-        x = [item[key] for item in file_values]
+        # file_values = file_path_list_generator.file_values
+        # key = list(file_values[0].keys())[0]
+        # x = [item[key] for item in file_values]
+        if x_parameter == "b0":
+            file_values = file_path_list_generator.file_values
+            key = list(file_values[0].keys())[0]
+            x = [item[key] for item in file_values]
+        else:
+            x = averages_and_stds_dict[x_parameter + "_average"]
         y = averages_and_stds_dict[variable + "_average"]
         yerr = averages_and_stds_dict[variable + "_std"]
         axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
@@ -123,8 +140,8 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
         file_path_list_generators, dataframes_lists
     ):
         x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
-        print("x_parameter: ", x_parameter)
-        print("file_path_list_generator.ramping: ", file_path_list_generator.ramping)
+        # print("x_parameter: ", x_parameter)
+        # print("file_path_list_generator.ramping: ", file_path_list_generator.ramping)
         if not file_path_list_generator.ramping:
             plot_averages(
                 file_path_list_generator, x_parameter, dataframes_list, variables
@@ -141,7 +158,8 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
             raise ValueError(
                 "file_path_list_generator ramping attribute must be True or False"
             )
-    plt.show(block=False)
+    # plt.show(block=False)
+    plt.show()
 
 
 def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
@@ -157,13 +175,14 @@ def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
 def plot_ramping(file_path_list_generator, x_parameter, dataframes_list, variables):
     fig, axs = generate_fig_and_axes_ramping(dataframes_list, variables, x_parameter)
     row_headers = []
+    x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
     for i, dataframe in enumerate(dataframes_list):
         for j, variable in enumerate(variables):
             ax = axs[i, j]
             if variable_units[variable] != "":
                 if i == 0:
                     ax.set_title(
-                        f"{variable_meanings[variable]} against {variable_meanings['temps']}"
+                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
                     )
 
                 ax.set_ylabel(
@@ -172,10 +191,10 @@ def plot_ramping(file_path_list_generator, x_parameter, dataframes_list, variabl
             else:
                 if i == 0:
                     ax.set_title(
-                        f"{variable_meanings[variable]} against {variable_meanings['temps']}"
+                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
                     )
                 ax.set_ylabel(f"{variable_symbols[variable]}")
-            x = dataframe.index.values.tolist()
+            x = dataframe[x_parameter]
             y = dataframe[variable].tolist()
             ax.plot(x, y, ".", color="black")
         row_headers.append(
