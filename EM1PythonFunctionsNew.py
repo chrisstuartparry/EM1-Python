@@ -49,9 +49,6 @@ def load_data_into_dataframe(file_path):
     default_index_dataframe = mat_to_DataFrame(file_path)
     temps_index_dataframe = default_index_dataframe.set_index("temps")
     temps_index_dataframe = temps_index_dataframe.filter(items=variables_list)
-    # for column in temps_index_dataframe.columns:
-    #     if column not in variables_list:
-    #         temps_index_dataframe.drop(column, axis=1, inplace=True)
 
     temps_index_dataframe["tim"] = (
         temps_index_dataframe["tite"] * temps_index_dataframe["tem"]
@@ -133,33 +130,6 @@ def plot_averages(
         yerr = averages_and_stds_dict[variable + "_std"]
         axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
     plt.plot()
-
-
-def plot_all(file_path_list_generators, dataframes_lists, variables):
-    for file_path_list_generator, dataframes_list in zip(
-        file_path_list_generators, dataframes_lists
-    ):
-        x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
-        # print("x_parameter: ", x_parameter)
-        # print("file_path_list_generator.ramping: ", file_path_list_generator.ramping)
-        if not file_path_list_generator.ramping:
-            plot_averages(
-                file_path_list_generator, x_parameter, dataframes_list, variables
-            )
-        elif file_path_list_generator.ramping:
-            plot_ramping(
-                file_path_list_generator, x_parameter, dataframes_list, variables
-            )
-        elif file_path_list_generator.ramping is None:
-            raise AttributeError(
-                "file_path_list_generator ramping attribute must exist (and be True or False)"
-            )
-        else:
-            raise ValueError(
-                "file_path_list_generator ramping attribute must be True or False"
-            )
-    plt.show(block=False)
-    # plt.show()
 
 
 def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
@@ -260,3 +230,30 @@ def add_headers(
                 rotation=rotate_row_headers * 90,
                 **text_kwargs,
             )
+
+
+def plot_all(file_path_list_generators, dataframes_lists, variables):
+    for file_path_list_generator, dataframes_list in zip(
+        file_path_list_generators, dataframes_lists
+    ):
+        x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
+        # print("x_parameter: ", x_parameter)
+        # print("file_path_list_generator.ramping: ", file_path_list_generator.ramping)
+        if not file_path_list_generator.ramping:
+            plot_averages(
+                file_path_list_generator, x_parameter, dataframes_list, variables
+            )
+        elif file_path_list_generator.ramping:
+            plot_ramping(
+                file_path_list_generator, x_parameter, dataframes_list, variables
+            )
+        elif file_path_list_generator.ramping is None:
+            raise AttributeError(
+                "file_path_list_generator ramping attribute must exist (and be True or False)"
+            )
+        else:
+            raise ValueError(
+                "file_path_list_generator ramping attribute must be True or False"
+            )
+    # plt.show(block=False)
+    plt.show()
