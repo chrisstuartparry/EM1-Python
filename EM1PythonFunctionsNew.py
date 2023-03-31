@@ -1,9 +1,6 @@
 import scipy.io as sio
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
-from varname import nameof
 from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
@@ -27,7 +24,7 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
     structure = mat_data[chosen_structure]
     substructure = structure[chosen_substructure][0, 0]
 
-    # Create a dictionary of the field names and corresponding data, one for arrays and one for scalars
+    # Create a dictionary of the fietld names and corresponding data, one for arrays and one for scalars
 
     array_data_dict = {}
     scalar_data_dict = {}
@@ -40,7 +37,7 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
 
     # Convert the array dictionary to a pandas DataFrame, and the scalar data to a pandas Series
     df = pd.DataFrame(array_data_dict)
-    series = pd.Series(scalar_data_dict)
+    # series = pd.Series(scalar_data_dict)
 
     return df
 
