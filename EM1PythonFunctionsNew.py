@@ -48,10 +48,10 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
 def load_data_into_dataframe(file_path):
     default_index_dataframe = mat_to_DataFrame(file_path)
     temps_index_dataframe = default_index_dataframe.set_index("temps")
-
-    for column in temps_index_dataframe.columns:
-        if column not in variables_list:
-            temps_index_dataframe.drop(column, axis=1, inplace=True)
+    temps_index_dataframe = temps_index_dataframe.filter(items=variables_list)
+    # for column in temps_index_dataframe.columns:
+    #     if column not in variables_list:
+    #         temps_index_dataframe.drop(column, axis=1, inplace=True)
 
     temps_index_dataframe["tim"] = (
         temps_index_dataframe["tite"] * temps_index_dataframe["tem"]
@@ -158,8 +158,8 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
             raise ValueError(
                 "file_path_list_generator ramping attribute must be True or False"
             )
-    # plt.show(block=False)
-    plt.show()
+    plt.show(block=False)
+    # plt.show()
 
 
 def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
