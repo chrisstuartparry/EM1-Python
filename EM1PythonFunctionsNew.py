@@ -43,21 +43,16 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
 
 
 def load_data_into_dataframe(file_path):
-    default_index_dataframe = mat_to_DataFrame(file_path)
-    temps_index_dataframe = default_index_dataframe.set_index("temps")
-    temps_index_dataframe = temps_index_dataframe.filter(items=variables_list)
+    file_dataframe = mat_to_DataFrame(file_path)
+    file_dataframe = file_dataframe.filter(items=variables_list)
 
-    temps_index_dataframe["tim"] = (
-        temps_index_dataframe["tite"] * temps_index_dataframe["tem"]
+    file_dataframe["tim"] = file_dataframe["tite"] * file_dataframe["tem"]
+
+    file_dataframe["nTtau"] = (
+        file_dataframe["nim"] * file_dataframe["tim"] * file_dataframe["taue"]
     )
 
-    temps_index_dataframe["nTtau"] = (
-        temps_index_dataframe["nim"]
-        * temps_index_dataframe["tim"]
-        * temps_index_dataframe["taue"]
-    )
-
-    return temps_index_dataframe
+    return file_dataframe
 
 
 def generate_fig_and_axs(variables, parameter_name):
@@ -252,5 +247,5 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
             raise ValueError(
                 "file_path_list_generator ramping attribute must be True or False"
             )
-    # plt.show(block=False)
-    plt.show()
+    plt.show(block=False)
+    # plt.show()
