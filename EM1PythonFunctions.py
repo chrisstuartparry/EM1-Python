@@ -1,14 +1,11 @@
 import scipy.io as sio
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-import os
 from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
     variable_units,
     variable_yticks,
-    variables_list,
     parameter_meanings,
     parameter_symbols,
     parameter_units,

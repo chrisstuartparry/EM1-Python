@@ -24,7 +24,7 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
     structure = mat_data[chosen_structure]
     substructure = structure[chosen_substructure][0, 0]
 
-    # Create a dictionary of the fietld names and corresponding data, one for arrays and one for scalars
+    # Create a dictionary of the field names & data, one for arrays and one for scalars
 
     array_data_dict = {}
     scalar_data_dict = {}
@@ -144,7 +144,8 @@ def plot_ramping(file_path_list_generator, x_parameter, dataframes_list, variabl
             if variable_units[variable] != "":
                 if i == 0:
                     ax.set_title(
-                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
+                        f"{variable_meanings[variable]} against\
+                            {variable_meanings[x_parameter]}"
                     )
 
                 ax.set_ylabel(
@@ -153,7 +154,8 @@ def plot_ramping(file_path_list_generator, x_parameter, dataframes_list, variabl
             else:
                 if i == 0:
                     ax.set_title(
-                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
+                        f"{variable_meanings[variable]} against\
+                        {variable_meanings[x_parameter]}"
                     )
                 ax.set_ylabel(f"{variable_symbols[variable]}")
             x = dataframe[x_parameter]
@@ -183,11 +185,14 @@ def add_headers(
 
     Args:
         fig (_type_): The figure which contains the axes to work on
-        row_headers (_type_, optional):  A sequence of strings to be row headers. Defaults to None.
-        col_headers (_type_, optional): A sequence of strings to be column headers. Defaults to None.
+        row_headers (_type_, optional):  A sequence of strings to be row headers.
+            Defaults to None.
+        col_headers (_type_, optional): A sequence of strings to be column headers.
+            Defaults to None.
         row_pad (int, optional): Value to adjust padding. Defaults to 1.
         col_pad (int, optional): Value to adjust padding. Defaults to 5.
-        rotate_row_headers (bool, optional): Whether to rotate by 90° the row headers. Defaults to True.
+        rotate_row_headers (bool, optional): Whether to rotate by 90° the row headers.
+            Defaults to True.
         **text_kwargs: Forwarded to ax.annotate(...)
     """
 

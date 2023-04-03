@@ -5,7 +5,6 @@ import os
 import tkinter as tk
 import tkinter.filedialog as fd
 import numpy as np
-import matplotlib.pyplot as plt
 from datetime import datetime
 from EM1PythonDictionaries import (
     variable_meanings,

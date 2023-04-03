@@ -1,7 +1,6 @@
 import os
 import tkinter as tk
 import tkinter.filedialog as fd
-from varname import nameof
 
 
 class FilePathListGenerator:

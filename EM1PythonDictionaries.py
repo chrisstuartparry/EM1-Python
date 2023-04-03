@@ -32,7 +32,7 @@ variable_meanings = {
     "modeh": "Confinement Mode [L=0, H=1]",
     "qeff": "Effective Safety Factor",
     "q0": "Central Safety Factor",
-    "q95": f"Safety Factor at 95\%",
+    "q95": "Safety Factor at 95%%",
     "temps": "Time",
     "pnbi": "NBI Input Power",
     "frnbi": "Frac. NBI absorbed in plasma",

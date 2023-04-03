@@ -1,16 +1,9 @@
-import scipy.io
-import numpy as np
 import matplotlib.pyplot as plt
-import os
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from EM1PythonFunctions import (
-    get_average,
-    get_triple_product,
     get_new_triple_product,
     get_variable,
-    plot_variable,
-    add_headers,
 )
 from EM1PythonDictionaries import variable_symbols, variable_units, variable_meanings
 
