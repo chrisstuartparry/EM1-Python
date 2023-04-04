@@ -1,12 +1,12 @@
 variable_symbols = {
     "taue": r"$\tau_E$",
-    "betan": r"$\beta_{\mathrm{normalised}}$",
+    "betan": r"$\beta_{\mathrm{N}}$",
     "modeh": r"H-Mode",
     "qeff": r"$q_{\mathrm{effective}}$",
     "q0": r"$q_0$",
     "q95": r"$q_{95}$",
     "temps": r"$t$",
-    "pnbi": r"$P_{\mathrm{NBI input}}$",
+    "pnbi": r"$P_{\mathrm{NBI}}$",
     "frnbi": r"$P_{\mathrm{NBI frac}}$",
     "pnbi_th": r"$P_{\mathrm{NBI thermal}}$",
     "ip": r"$I_{\mathrm{plasma}}$",
@@ -18,9 +18,9 @@ variable_symbols = {
     "tem": r"$\bar{T}_e$",
     "tite": r"$\frac{T_i}{T_e}$",
     "pfus": r"$P_{\mathrm{fusion}}$",
-    "sext": r"$S_{\mathrm{external}}$",
-    "vp": r"$V_{\mathrm{plasma}}$",
-    "W": r"$E_{\mathrm{plasma}}$",
+    "sext": r"$S_{\mathrm{ext}}$",
+    "vp": r"$V_{\mathrm{p}}$",
+    "W": r"$E_{\mathrm{p}}$",
     "ni0titetaue": r"$n_{i(0)}\frac{T_i}{T_e}\tau_E$",  # This is a custom variable
     "nimtimtaue": r"$n_{i(m)}T_{i(m)}\tau_E$",  # This is a custom variable
     "nTtau": r"$\bar{n}_i \bar{T}_i \tau_E$",  # This is a custom variable
@@ -34,7 +34,7 @@ variable_meanings = {
     "q0": "Central Safety Factor",
     "q95": "Safety Factor at 95%%",
     "temps": "Time",
-    "pnbi": "NBI Input Power",
+    "pnbi": "NBI",
     "frnbi": "Frac. NBI absorbed in plasma",
     "pnbi_th": "NBI Therm. Power Deposit.",
     "ip:": "Plasma Current",
