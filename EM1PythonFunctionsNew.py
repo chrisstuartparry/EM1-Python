@@ -1,6 +1,8 @@
 import scipy.io as sio
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+import glob
 from EM1PythonDictionaries import (
     variable_meanings,
     variable_symbols,
@@ -134,35 +136,62 @@ def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
     return fig, axs
 
 
-def plot_ramping(file_path_list_generator, x_parameter, dataframes_list, variables):
-    fig, axs = generate_fig_and_axes_ramping(dataframes_list, variables, x_parameter)
-    row_headers = []
-    x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
+def draw_ramping_all_ramps(
+    file_path_list_generator, x_parameter, dataframes_list, variables, axs, row_headers
+):
     for i, dataframe in enumerate(dataframes_list):
         for j, variable in enumerate(variables):
             ax = axs[i, j]
             if variable_units[variable] != "":
                 if i == 0:
                     ax.set_title(
-                        f"{variable_meanings[variable]} against\
-                            {variable_meanings[x_parameter]}"
+                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
                     )
-
+                ax.set_xlabel(
+                    f"{variable_symbols[x_parameter]} ({variable_units[x_parameter]})"
+                )
                 ax.set_ylabel(
                     f"{variable_symbols[variable]} ({variable_units[variable]})"
                 )
             else:
                 if i == 0:
                     ax.set_title(
-                        f"{variable_meanings[variable]} against\
-                        {variable_meanings[x_parameter]}"
+                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
                     )
+                ax.set_xlabel(
+                    f"{variable_symbols[x_parameter]} ({variable_units[x_parameter]})"
+                )
                 ax.set_ylabel(f"{variable_symbols[variable]}")
             x = dataframe[x_parameter]
             y = dataframe[variable].tolist()
             ax.plot(x, y, ".", color="black")
         row_headers.append(
             f"0MW to {list(file_path_list_generator.file_values[i].values())[0]}MW"
+        )
+
+
+def plot_ramping_all_ramps(
+    file_path_list_generator, x_parameter, dataframes_list, variables, temps=False
+):
+    fig, axs = generate_fig_and_axes_ramping(dataframes_list, variables, x_parameter)
+    row_headers = []
+    if temps:
+        draw_ramping_all_ramps(
+            file_path_list_generator,
+            "temps",
+            dataframes_list,
+            variables,
+            axs,
+            row_headers,
+        )
+    else:
+        draw_ramping_all_ramps(
+            file_path_list_generator,
+            x_parameter,
+            dataframes_list,
+            variables,
+            axs,
+            row_headers,
         )
     add_headers(fig, row_headers=row_headers)
     plt.plot()
@@ -241,8 +270,19 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
                 file_path_list_generator, x_parameter, dataframes_list, variables
             )
         elif file_path_list_generator.ramping:
-            plot_ramping(
-                file_path_list_generator, x_parameter, dataframes_list, variables
+            plot_ramping_all_ramps(
+                file_path_list_generator,
+                x_parameter,
+                dataframes_list,
+                variables,
+                temps=False,
+            )
+            plot_ramping_all_ramps(
+                file_path_list_generator,
+                x_parameter,
+                dataframes_list,
+                variables,
+                temps=True,
             )
         elif file_path_list_generator.ramping is None:
             raise AttributeError(
@@ -252,5 +292,11 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
             raise ValueError(
                 "file_path_list_generator ramping attribute must be True or False"
             )
-    plt.show(block=False)
-    # plt.show()
+    # plt.show(block=False)
+    plt.show()
+
+
+def get_files_from_folder(
+    folder_path="EM1 Data/Misc Data to Plot", file_extension="*.mat"
+):
+    file_paths = glob.glob(os.path.join(folder_path, file_extension))
