@@ -16,7 +16,7 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 
 pnbi_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/3rd Run Data (fast mode)",
-    file_name_template="2023-01-25 NBI Power {pnbi}MW.mat",
+    file_name_template="NBI Power {pnbi}MW.mat",
     file_values=[
         {"pnbi": value}
         for value in [
@@ -47,7 +47,7 @@ pnbi_dataframes = [load_data_into_dataframe(file_path) for file_path in pnbi_fil
 
 B0_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/4th Run Data (fast mode)",
-    file_name_template="2023-01-27 NBI Power 2MW B0 {b0}T.mat",
+    file_name_template="NBI Power 2MW B0 {b0}T.mat",
     file_values=[
         {"b0": value} for value in (np.array(range(1, 41, 1), dtype=float) / 10)
     ],
@@ -61,7 +61,7 @@ B0_dataframes = [load_data_into_dataframe(file_path) for file_path in B0_file_pa
 
 Ip_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/5th Run Data (fast mode)/",
-    file_name_template="2023-01-31 NBI Power 2MW Ip {ip}MA.mat",
+    file_name_template="NBI Power 2MW Ip {ip}MA.mat",
     file_values=[
         {"ip": value} for value in (np.array(range(1, 51, 1), dtype=float) / 10)
     ],
@@ -75,7 +75,7 @@ Ip_dataframes = [load_data_into_dataframe(file_path) for file_path in Ip_file_pa
 
 nbar_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/6th Run Data (fast mode)",
-    file_name_template="2023-01-31 NBI Power 2MW nbar {nim}.mat",
+    file_name_template="NBI Power 2MW nbar {nim}.mat",
     file_values=[
         {"nim": value} for value in (np.array(range(1, 41, 1), dtype=float) / 10)
     ],
@@ -89,7 +89,7 @@ nbar_dataframes = [load_data_into_dataframe(file_path) for file_path in nbar_fil
 
 full_ramp_file_path_list_generator = FilePathListGenerator(
     base_path="EM1 Data/8th Run Data (fast mode)",
-    file_name_template=("2023-02-03 NBI Ramping 0 to {pnbi}MW.mat"),
+    file_name_template=("NBI Ramping 0 to {pnbi}MW.mat"),
     file_values=[{"pnbi": value} for value in np.array(range(2, 11, 2))],
     ramping=True,
 )
@@ -125,9 +125,6 @@ dataframes_lists_to_plot = [
 ]
 
 plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
-# pstats.Stats(
-#     cProfile.Profile().run(
-#         "plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)"
-#     )
-# ).strip_dirs().sort_stats(pstats.SortKey.CUMULATIVE).print_stats(20)
 print(f"Done in {datetime.now() - start_time}")
+
+# TODO Add code to analyse whichever files are in a certain folder. Hints to do this are in recent ChatGPT chat "Configuring file selection with JSON.". Don't use JSON, though.
