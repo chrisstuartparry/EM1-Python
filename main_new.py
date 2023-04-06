@@ -13,3 +13,4 @@ pnbi_class = DataProcessor(
 )
 print(pnbi_class.x_parameter_list)
 print(pnbi_class.list_of_files_via_glob)
+print(len(pnbi_class.list_of_dataframes))
