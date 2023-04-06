@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
+
+from pandas import DataFrame
 from EM1PythonFunctionsNew import plot_all, load_data_into_dataframe
 from EM1PythonClasses import FilePathListGenerator
 
@@ -38,8 +40,12 @@ pnbi_file_path_list_generator = FilePathListGenerator(
         + list(range(2, 41, 2))
     ],
 )
-pnbi_file_paths = pnbi_file_path_list_generator.get_file_paths(user_decides=False)
-pnbi_dataframes = [load_data_into_dataframe(file_path) for file_path in pnbi_file_paths]
+pnbi_file_paths: list[str] = pnbi_file_path_list_generator.get_file_paths(
+    user_decides=False
+)
+pnbi_dataframes: list[DataFrame] = [
+    load_data_into_dataframe(file_path) for file_path in pnbi_file_paths
+]
 # pnbi_dataframes_dictionary = {
 #     os.path.basename(file_path): pnbi_dataframe
 #     for file_path, pnbi_dataframe in zip(pnbi_file_paths, pnbi_dataframes)
@@ -52,8 +58,12 @@ B0_file_path_list_generator = FilePathListGenerator(
         {"b0": value} for value in (np.array(range(1, 41, 1), dtype=float) / 10)
     ],
 )
-B0_file_paths = B0_file_path_list_generator.get_file_paths(user_decides=False)
-B0_dataframes = [load_data_into_dataframe(file_path) for file_path in B0_file_paths]
+B0_file_paths: list[str] = B0_file_path_list_generator.get_file_paths(
+    user_decides=False
+)
+B0_dataframes: list[DataFrame] = [
+    load_data_into_dataframe(file_path) for file_path in B0_file_paths
+]
 # B0_dataframes_dictionary = {
 #     os.path.basename(file_path): B0_dataframe
 #     for file_path, B0_dataframe in zip(B0_file_paths, B0_dataframes)
@@ -66,8 +76,12 @@ Ip_file_path_list_generator = FilePathListGenerator(
         {"ip": value} for value in (np.array(range(1, 51, 1), dtype=float) / 10)
     ],
 )
-Ip_file_paths = Ip_file_path_list_generator.get_file_paths(user_decides=False)
-Ip_dataframes = [load_data_into_dataframe(file_path) for file_path in Ip_file_paths]
+Ip_file_paths: list[str] = Ip_file_path_list_generator.get_file_paths(
+    user_decides=False
+)
+Ip_dataframes: list[DataFrame] = [
+    load_data_into_dataframe(file_path) for file_path in Ip_file_paths
+]
 # Ip_dataframes_dictionary = {
 #     os.path.basename(file_path): Ip_dataframe
 #     for file_path, Ip_dataframe in zip(Ip_file_paths, Ip_dataframes)
@@ -80,8 +94,12 @@ nbar_file_path_list_generator = FilePathListGenerator(
         {"nim": value} for value in (np.array(range(1, 41, 1), dtype=float) / 10)
     ],
 )
-nbar_file_paths = nbar_file_path_list_generator.get_file_paths(user_decides=False)
-nbar_dataframes = [load_data_into_dataframe(file_path) for file_path in nbar_file_paths]
+nbar_file_paths: list[str] = nbar_file_path_list_generator.get_file_paths(
+    user_decides=False
+)
+nbar_dataframes: list[DataFrame] = [
+    load_data_into_dataframe(file_path) for file_path in nbar_file_paths
+]
 # nbar_dataframes_dictionary = {
 #     os.path.basename(file_path): nbar_dataframe
 #     for file_path, nbar_dataframe in zip(nbar_file_paths, nbar_dataframes)
@@ -93,10 +111,10 @@ full_ramp_file_path_list_generator = FilePathListGenerator(
     file_values=[{"pnbi": value} for value in np.array(range(2, 11, 2))],
     ramping=True,
 )
-full_ramp_file_paths = full_ramp_file_path_list_generator.get_file_paths(
+full_ramp_file_paths: list[str] = full_ramp_file_path_list_generator.get_file_paths(
     user_decides=False
 )
-full_ramp_dataframes = [
+full_ramp_dataframes: list[DataFrame] = [
     load_data_into_dataframe(file_path) for file_path in full_ramp_file_paths
 ]
 # full_ramp_dataframes_dictionary = {
@@ -106,9 +124,9 @@ full_ramp_dataframes = [
 #     )
 # }
 
-variables = ["nTtau", "ni0", "taue", "tite", "tem"]
+variables: list[str] = ["nTtau", "ni0", "taue", "tite", "tem"]
 
-file_path_list_generators_to_plot = [
+file_path_list_generators_to_plot: list[FilePathListGenerator] = [
     pnbi_file_path_list_generator,
     B0_file_path_list_generator,
     Ip_file_path_list_generator,
@@ -116,7 +134,7 @@ file_path_list_generators_to_plot = [
     full_ramp_file_path_list_generator,
 ]
 
-dataframes_lists_to_plot = [
+dataframes_lists_to_plot: list[list[DataFrame]] = [
     pnbi_dataframes,
     B0_dataframes,
     Ip_dataframes,

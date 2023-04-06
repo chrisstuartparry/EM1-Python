@@ -1,3 +1,4 @@
+from pandas import DataFrame
 import scipy.io as sio
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,8 +45,8 @@ def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="ze
     return df
 
 
-def load_data_into_dataframe(file_path):
-    file_dataframe = mat_to_DataFrame(file_path)
+def load_data_into_dataframe(file_path) -> DataFrame:
+    file_dataframe: DataFrame = mat_to_DataFrame(file_path)
     file_dataframe = file_dataframe.filter(items=variables_list)
 
     file_dataframe["tim"] = file_dataframe["tite"] * file_dataframe["tem"]
@@ -57,9 +58,9 @@ def load_data_into_dataframe(file_path):
     return file_dataframe
 
 
-def generate_fig_and_axs(variables, parameter_name):
+def generate_fig_and_axs(variables: list[str], parameter_name: str):
     nrows = 1
-    ncols = len(variables)
+    ncols: int = len(variables)
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
@@ -126,9 +127,11 @@ def plot_averages(
     plt.plot()
 
 
-def generate_fig_and_axes_ramping(dataframes_list, variables, parameter_name):
-    nrows = len(dataframes_list)
-    ncols = len(variables)
+def generate_fig_and_axes_ramping(
+    dataframes_list: list[DataFrame], variables: list[str], parameter_name: str
+):
+    nrows: int = len(dataframes_list)
+    ncols: int = len(variables)
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
@@ -296,7 +299,7 @@ def plot_all(file_path_list_generators, dataframes_lists, variables):
     plt.show()
 
 
-def get_files_from_folder(
-    folder_path="EM1 Data/Misc Data to Plot", file_extension="*.mat"
-):
-    file_paths = glob.glob(os.path.join(folder_path, file_extension))
+# def get_files_from_folder(
+#     folder_path="EM1 Data/Misc Data to Plot", file_extension="*.mat"
+# ):
+#     file_paths = glob.glob(os.path.join(folder_path, file_extension))
