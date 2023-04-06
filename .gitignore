@@ -1,6 +1,6 @@
 .DS_Store
-.vscode
 __pycache__
 .mypy_cache
 profile.html
 profile.json
+.pytest_cache
