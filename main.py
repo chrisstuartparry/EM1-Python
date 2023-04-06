@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 from pandas import DataFrame
-from EM1PythonFunctionsNew import plot_all, load_data_into_dataframe
+from EM1PythonFunctions import plot_all, load_data_into_dataframe
 from EM1PythonClasses import FilePathListGenerator
 
 start_time = datetime.now()

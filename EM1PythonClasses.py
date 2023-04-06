@@ -1,7 +1,8 @@
 import os
 import tkinter as tk
 import tkinter.filedialog as fd
-from typing import Literal
+import glob
+import re
 
 
 class FilePathListGenerator:
@@ -32,3 +33,30 @@ class FilePathListGenerator:
         #     return file_paths
         # else:
         return self.generate_file_paths()
+
+
+class DataProcessor:
+    def __init__(
+        self, base_path: str, file_name_template: str, primary_x_parameter: str
+    ) -> None:
+        self.base_path = base_path
+        self.file_name_template = file_name_template
+        self.glob_file_name_template = file_name_template.format("*")
+        self.primary_x_parameter = primary_x_parameter
+
+    def get_files_list(self) -> list[str]:
+        glob_file_path = os.path.join(self.base_path, self.glob_file_name_template)
+        list_of_files_via_glob = sorted(glob.glob(glob_file_path))
+        return list_of_files_via_glob
+
+    def generate_x_parameter_list(self) -> list[dict[str, float]]:
+        files_list: list[str] = self.get_files_list()
+        regex_pattern = self.file_name_template.format(r"(\d+)")
+
+        x_parameter_list: list[dict[str, float]] = [
+            {f"{self.primary_x_parameter}": float(match.group(1))}
+            for file in files_list
+            if (match := re.search(regex_pattern, file))
+        ]
+
+        return x_parameter_list
