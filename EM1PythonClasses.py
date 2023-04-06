@@ -48,7 +48,13 @@ class DataProcessor:
 
     def get_files_list(self) -> list[str]:
         glob_file_path = os.path.join(self.base_path, self.glob_file_name_template)
-        list_of_files_via_glob = sorted(glob.glob(glob_file_path))
+        list_of_files_via_glob = glob.glob(glob_file_path)
+        regex_pattern = self.file_name_template.format(r"(\d+(\.\d+)?)")
+        list_of_files_via_glob.sort(
+            key=lambda file: float(match.group(1))
+            if (match := re.search(regex_pattern, file))
+            else 0
+        )
         return list_of_files_via_glob
 
     def generate_x_parameter_list(self) -> list[dict[str, float]]:

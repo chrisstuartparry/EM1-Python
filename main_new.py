@@ -12,4 +12,4 @@ pnbi_class = DataProcessor(
     primary_x_parameter="pnbi",
 )
 print(pnbi_class.x_parameter_list)
-# print(pnbi_class.list_of_files_via_glob)
+print(pnbi_class.list_of_files_via_glob)
