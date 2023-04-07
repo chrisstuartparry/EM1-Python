@@ -1,0 +1,50 @@
+from matplotlib import pyplot as plt
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+from EM1PythonClasses import DataProcessor
+from EM1PythonDictionaries import parameter_meanings
+
+
+def plot_all(DataProcessor: DataProcessor, variables: list[str]) -> None:
+    if not DataProcessor.plot_raw:
+        plot_averages  # TODO Finish this function once dependencies are finished
+
+
+def plot_averages(
+    DataProcessor: DataProcessor,
+    variables: list[str],
+) -> None:
+    fig, axs = generate_fig_and_axs(DataProcessor, variables)
+    means_stds = get_means_stds()
+
+
+def generate_fig_and_axs(
+    DataProcessor, variables: list[str]
+) -> tuple[Figure, list[Axes]]:
+    nrows = 1
+    ncols: int = len(variables)
+    parameter_name = DataProcessor.primary_x_parameter
+    fig, axs = plt.subplots(
+        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
+    )
+    fig.suptitle(
+        f"Averages vs. {parameter_meanings[parameter_name]}",
+        fontsize=10,
+    )
+    return fig, axs
+    # TODO Rework this function to make plots more readable and more robust using questions asked to ChatGPT
+
+
+def get_means_stds(DataProcessor: DataProcessor, variables: list[str]):
+    means_stds = {}
+    for variable in variables:
+        variable_means = [
+            dataframe[variable].iloc[DataProcessor.start : DataProcessor.end].mean()
+            for dataframe in DataProcessor.list_of_dataframes
+        ]
+        variable_stds = [
+            dataframe[variable].iloc[DataProcessor.start : DataProcessor.end].std()
+            for dataframe in DataProcessor.list_of_dataframes
+        ]
+        means_stds[variable + "_mean"] = variable_means
+        means_stds[variable + "_std"] = variable_stds

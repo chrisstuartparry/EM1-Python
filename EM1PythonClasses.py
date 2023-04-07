@@ -40,8 +40,15 @@ class FilePathListGenerator:
 
 
 class DataProcessor:
+    start = 50
+    end = 100
+
     def __init__(
-        self, base_path: str, file_name_template: str, primary_x_parameter: str
+        self,
+        base_path: str,
+        file_name_template: str,
+        primary_x_parameter: str,
+        plot_raw: bool = False,
     ) -> None:
         self.base_path = base_path
         self.file_name_template = file_name_template
@@ -50,6 +57,7 @@ class DataProcessor:
         self.x_parameter_list: list[dict[str, float]] = self.generate_x_parameter_list()
         self.list_of_files_via_glob: list[str] = self.get_files_list()
         self.list_of_dataframes: list[DataFrame] = self.generate_dataframes_list()
+        self.plot_raw = plot_raw
 
     def get_files_list(self) -> list[str]:
         glob_file_path = os.path.join(self.base_path, self.glob_file_name_template)
@@ -75,7 +83,7 @@ class DataProcessor:
 
     def mat_to_DataFrame(
         self, file_path, chosen_structure="post", chosen_substructure="zerod"
-    ):
+    ) -> DataFrame:
         mat_data = sio.loadmat(file_path)
         structure = mat_data[chosen_structure]
         substructure = structure[chosen_substructure][0, 0]
