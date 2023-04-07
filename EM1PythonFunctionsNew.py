@@ -15,7 +15,7 @@ def plot_averages(
     variables: list[str],
 ) -> None:
     fig, axs = generate_fig_and_axs(DataProcessor, variables)
-    means_stds = get_means_stds()
+    means_stds = get_means_stds(DataProcessor, variables)
 
 
 def generate_fig_and_axs(
@@ -48,3 +48,18 @@ def get_means_stds(DataProcessor: DataProcessor, variables: list[str]):
         ]
         means_stds[variable + "_mean"] = variable_means
         means_stds[variable + "_std"] = variable_stds
+        x_parameter_means = [
+            dataframe[DataProcessor.primary_x_parameter]
+            .iloc[DataProcessor.start : DataProcessor.end]
+            .mean()
+            for dataframe in DataProcessor.list_of_dataframes
+        ]
+        x_parameter_stds = [
+            dataframe[DataProcessor.primary_x_parameter]
+            .iloc[DataProcessor.start : DataProcessor.end]
+            .std()
+            for dataframe in DataProcessor.list_of_dataframes
+        ]
+        means_stds[DataProcessor.primary_x_parameter + "_mean"] = x_parameter_means
+        means_stds[DataProcessor.primary_x_parameter + "_std"] = x_parameter_stds
+        return means_stds
