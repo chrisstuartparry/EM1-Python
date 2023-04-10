@@ -14,4 +14,4 @@ print(pnbi_class.x_parameter_list)
 print(pnbi_class.list_of_files_via_glob)
 print(len(pnbi_class.list_of_dataframes))
 
-plot_averages(pnbi_class, ["nTtau", "ni0", "taue", "tite", "tem"])
+plot_averages(pnbi_class, ["nTtau", "ni0", "taue", "tite", "tem", "betap"])

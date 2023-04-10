@@ -146,3 +146,9 @@ plot_all(file_path_list_generators_to_plot, dataframes_lists_to_plot, variables)
 print(f"Done in {datetime.now() - start_time}")
 
 # TODO Add code to analyse whichever files are in a certain folder. Hints to do this are in recent ChatGPT chat "Configuring file selection with JSON.". Don't use JSON, though.
+fig, axes = plt.subplots(nrows=1, ncols=2)
+for axis in axes:
+    print(type(axis))
+fig, axes = plt.subplots(nrows=2, ncols=2)
+for axis in axes:
+    print(type(axis))

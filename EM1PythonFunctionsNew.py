@@ -1,5 +1,5 @@
 from typing import Any, TypeVar
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from EM1PythonClasses import DataProcessor
@@ -13,6 +13,13 @@ from EM1PythonDictionaries import (
 )
 import numpy as np
 
+plt.rcParams["text.usetex"] = True
+plt.rcParams["text.latex.preamble"] = "\n".join(
+    [
+        r"\usepackage{siunitx}",
+    ]
+)
+
 
 def plot_all(DataProcessor: DataProcessor, variables: list[str]) -> None:
     if not DataProcessor.plot_raw:
@@ -25,30 +32,61 @@ def plot_averages(
 ) -> None:
     fig, axs = generate_fig_and_axs(DataProcessor, variables)
     means_stds = get_means_stds(DataProcessor, variables)
-    for i, variable in enumerate(variables):
-        axs[i].set_title(
-            f"{variable_meanings[variable]} vs. {parameter_symbols[DataProcessor.primary_x_parameter]}",
-            fontsize=10,
-        )
-        axs[i].set_xlabel(
-            f"{parameter_symbols[DataProcessor.primary_x_parameter]} ({parameter_units[DataProcessor.primary_x_parameter]})"
-        )
-        axs[i].set_ylabel(f"{variable_symbols[variable]} ({variable_units[variable]})")
-        x = means_stds[DataProcessor.primary_x_parameter + "_mean"]
-        y = means_stds[variable + "_mean"]
-        yerr = means_stds[variable + "_std"]
-        axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
+
+    index = 0
+    nrows, ncols = axs.shape
+
+    loop_flag = True
+    for row in range(nrows):
+        for col in range(ncols):
+            if index >= len(variables):
+                loop_flag = False
+                for i in range(col, ncols):
+                    axs[row, i].axis("off")
+                break
+            variable = variables[index]
+            axs[row, col].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[DataProcessor.primary_x_parameter]}",
+                fontsize=10,
+            )
+            axs[row, col].set_xlabel(
+                f"{parameter_symbols[DataProcessor.primary_x_parameter]} ({parameter_units[DataProcessor.primary_x_parameter]})"
+            )
+            axs[row, col].set_ylabel(
+                f"{variable_symbols[variable]} ({variable_units[variable]})"
+            )
+            x = means_stds[DataProcessor.primary_x_parameter + "_mean"]
+            y = means_stds[variable + "_mean"]
+            yerr = means_stds[variable + "_std"]
+            axs[row, col].errorbar(
+                x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5
+            )
+            index += 1
+        if not loop_flag:
+            break
+    # for i, variable in enumerate(variables):
+    #     axs[i].set_title(
+    #         f"{variable_meanings[variable]} vs. {parameter_symbols[DataProcessor.primary_x_parameter]}",
+    #         fontsize=10,
+    #     )
+    # axs[i].set_xlabel(
+    #     f"{parameter_symbols[DataProcessor.primary_x_parameter]} ({parameter_units[DataProcessor.primary_x_parameter]})"
+    # )
+    #     axs[i].set_ylabel(f"{variable_symbols[variable]} ({variable_units[variable]})")
+    #     x = means_stds[DataProcessor.primary_x_parameter + "_mean"]
+    #     y = means_stds[variable + "_mean"]
+    #     yerr = means_stds[variable + "_std"]
+    #     axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
     plt.show()
 
 
-def generate_fig_and_axs(
-    DataProcessor, variables: list[str]
-) -> tuple[Figure, list[Axes]]:
+def generate_fig_and_axs(DataProcessor, variables: list[str]) -> tuple[Figure, Any]:
     num_variables = len(variables)
     parameter_name = DataProcessor.primary_x_parameter
     ncols: int = 4
     nrows: int = (num_variables + ncols - 1) // ncols
-
+    fig: Figure
+    axs: Any
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
@@ -56,7 +94,6 @@ def generate_fig_and_axs(
         f"Averages vs. {parameter_meanings[parameter_name]}",
         fontsize=10,
     )
-    axs = axs.flatten()
     return fig, axs
 
 
@@ -90,3 +127,14 @@ def get_means_stds(
         means_stds[DataProcessor.primary_x_parameter + "_mean"] = x_parameter_means
         means_stds[DataProcessor.primary_x_parameter + "_std"] = x_parameter_stds
     return means_stds
+
+
+def generate_fig_and_axes_subsets(DataProcessor: DataProcessor, variables: list[str]):
+    nrows: int = len(DataProcessor.list_of_dataframes)
+    ncols: int = len(variables)
+    fig, axs = plt.subplots(
+        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
+    )
+    return fig, axs
+
+def draw_subsets_all_subsets()
