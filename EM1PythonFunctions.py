@@ -1,6 +1,5 @@
-from typing import Any, Iterator, TypeVar
+from typing import Any
 import matplotlib.pyplot as plt
-from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from EM1PythonClasses import DataProcessor
 from EM1PythonDictionaries import (
@@ -11,7 +10,6 @@ from EM1PythonDictionaries import (
     variable_symbols,
     variable_units,
 )
-import numpy as np
 
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(

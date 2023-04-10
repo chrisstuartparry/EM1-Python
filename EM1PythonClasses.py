@@ -1,6 +1,4 @@
 import os
-import tkinter as tk
-import tkinter.filedialog as fd
 import glob
 import re
 import scipy.io as sio

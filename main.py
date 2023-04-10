@@ -1,7 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from datetime import datetime
-from pandas import DataFrame
 from EM1PythonFunctions import plot_all
 from EM1PythonClasses import DataProcessor
 
