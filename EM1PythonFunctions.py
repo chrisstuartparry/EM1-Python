@@ -1,18 +1,17 @@
-from pandas import DataFrame
-import scipy.io as sio
-import pandas as pd
+from typing import Any, Iterator, TypeVar
 import matplotlib.pyplot as plt
-import os
-import glob
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+from EM1PythonClasses import DataProcessor
 from EM1PythonDictionaries import (
-    variable_meanings,
-    variable_symbols,
-    variable_units,
-    variables_list,
     parameter_meanings,
     parameter_symbols,
     parameter_units,
+    variable_meanings,
+    variable_symbols,
+    variable_units,
 )
+import numpy as np
 
 plt.rcParams["text.usetex"] = True
 plt.rcParams["text.latex.preamble"] = "\n".join(
@@ -22,45 +21,67 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 )
 
 
-def mat_to_DataFrame(file_path, chosen_structure="post", chosen_substructure="zerod"):
-    mat_data = sio.loadmat(file_path)
-    structure = mat_data[chosen_structure]
-    substructure = structure[chosen_substructure][0, 0]
+def plot_averages(
+    DataProcessor: DataProcessor,
+    variables: list[str],
+) -> None:
+    fig, axs = generate_fig_and_axs(DataProcessor, variables)
+    means_stds = get_means_stds(DataProcessor, variables)
 
-    # Create a dictionary of the field names & data, one for arrays and one for scalars
+    index = 0
+    nrows, ncols = axs.shape
 
-    array_data_dict = {}
-    scalar_data_dict = {}
-    for field_name in substructure.dtype.names:
-        field_data = substructure[field_name][0, 0]
-        if field_data.size == 1:
-            scalar_data_dict[field_name] = field_data[0]
-        else:
-            array_data_dict[field_name] = field_data.squeeze()
+    loop_flag = True
+    for row in range(nrows):
+        for col in range(ncols):
+            if index >= len(variables):
+                loop_flag = False
+                for i in range(col, ncols):
+                    axs[row, i].axis("off")
+                break
+            variable = variables[index]
+            axs[row, col].set_title(
+                f"{variable_meanings[variable]} vs. {parameter_symbols[DataProcessor.primary_x_parameter]}",
+                fontsize=10,
+            )
+            axs[row, col].set_xlabel(
+                f"{parameter_symbols[DataProcessor.primary_x_parameter]} ({parameter_units[DataProcessor.primary_x_parameter]})"
+            )
+            axs[row, col].set_ylabel(
+                f"{variable_symbols[variable]} ({variable_units[variable]})"
+            )
+            x = means_stds[DataProcessor.primary_x_parameter + "_mean"]
+            y = means_stds[variable + "_mean"]
+            yerr = means_stds[variable + "_std"]
+            axs[row, col].errorbar(
+                x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5
+            )
+            index += 1
+        if not loop_flag:
+            break
+    # for i, variable in enumerate(variables):
+    #     axs[i].set_title(
+    #         f"{variable_meanings[variable]} vs. {parameter_symbols[DataProcessor.primary_x_parameter]}",
+    #         fontsize=10,
+    #     )
+    # axs[i].set_xlabel(
+    #     f"{parameter_symbols[DataProcessor.primary_x_parameter]} ({parameter_units[DataProcessor.primary_x_parameter]})"
+    # )
+    #     axs[i].set_ylabel(f"{variable_symbols[variable]} ({variable_units[variable]})")
+    #     x = means_stds[DataProcessor.primary_x_parameter + "_mean"]
+    #     y = means_stds[variable + "_mean"]
+    #     yerr = means_stds[variable + "_std"]
+    #     axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
+    plt.plot()
 
-    # Convert the array dictionary to a pandas DataFrame, and the scalar data to a pandas Series
-    df = pd.DataFrame(array_data_dict)
-    # series = pd.Series(scalar_data_dict)
 
-    return df
-
-
-def load_data_into_dataframe(file_path) -> DataFrame:
-    file_dataframe: DataFrame = mat_to_DataFrame(file_path)
-    file_dataframe = file_dataframe.filter(items=variables_list)
-
-    file_dataframe["tim"] = file_dataframe["tite"] * file_dataframe["tem"]
-
-    file_dataframe["nTtau"] = (
-        file_dataframe["nim"] * file_dataframe["tim"] * file_dataframe["taue"]
-    )
-
-    return file_dataframe
-
-
-def generate_fig_and_axs(variables: list[str], parameter_name: str):
-    nrows = 1
-    ncols: int = len(variables)
+def generate_fig_and_axs(DataProcessor, variables: list[str]) -> tuple[Figure, Any]:
+    num_variables = len(variables)
+    parameter_name = DataProcessor.primary_x_parameter
+    ncols: int = 4
+    nrows: int = (num_variables + ncols - 1) // ncols
+    fig: Figure
+    axs: Any
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
@@ -71,78 +92,55 @@ def generate_fig_and_axs(variables: list[str], parameter_name: str):
     return fig, axs
 
 
-def get_averages_and_stds(dataframes_list, x_parameter, variables, start=50, end=100):
-    averages_and_stds = {}
+def get_means_stds(
+    DataProcessor: DataProcessor, variables: list[str]
+) -> dict[Any, Any]:
+    means_stds: dict = {}
     for variable in variables:
-        variable_averages = [
-            dataframe[variable].iloc[start:end].mean() for dataframe in dataframes_list
+        variable_means = [
+            dataframe[variable].iloc[DataProcessor.start : DataProcessor.end].mean()
+            for dataframe in DataProcessor.list_of_dataframes
         ]
         variable_stds = [
-            dataframe[variable].iloc[start:end].std() for dataframe in dataframes_list
+            dataframe[variable].iloc[DataProcessor.start : DataProcessor.end].std()
+            for dataframe in DataProcessor.list_of_dataframes
         ]
-        averages_and_stds[variable + "_average"] = variable_averages
-        averages_and_stds[variable + "_std"] = variable_stds
-    if x_parameter != "b0":
-        x_parameter_average = [
-            dataframe[x_parameter].iloc[start:end].mean()
-            for dataframe in dataframes_list
+        means_stds[variable + "_mean"] = variable_means
+        means_stds[variable + "_std"] = variable_stds
+        x_parameter_means = [
+            dataframe[DataProcessor.primary_x_parameter]
+            .iloc[DataProcessor.start : DataProcessor.end]
+            .mean()
+            for dataframe in DataProcessor.list_of_dataframes
         ]
-        x_parameter_std = [
-            dataframe[x_parameter].iloc[start:end].std()
-            for dataframe in dataframes_list
+        x_parameter_stds = [
+            dataframe[DataProcessor.primary_x_parameter]
+            .iloc[DataProcessor.start : DataProcessor.end]
+            .std()
+            for dataframe in DataProcessor.list_of_dataframes
         ]
-        averages_and_stds[x_parameter + "_average"] = x_parameter_average
-        averages_and_stds[x_parameter + "_std"] = x_parameter_std
-    return averages_and_stds
+        means_stds[DataProcessor.primary_x_parameter + "_mean"] = x_parameter_means
+        means_stds[DataProcessor.primary_x_parameter + "_std"] = x_parameter_stds
+    return means_stds
 
 
-def plot_averages(
-    file_path_list_generator, x_parameter, dataframes_list, variables, start=50, end=100
-):
-    fig, axs = generate_fig_and_axs(variables, x_parameter)
-    averages_and_stds_dict = get_averages_and_stds(
-        dataframes_list, x_parameter, variables, start, end
-    )
-    for i, variable in enumerate(variables):
-        axs[i].set_title(
-            f"{variable_meanings[variable]} vs. {parameter_symbols[x_parameter]}",
-            fontsize=10,
-        )
-        axs[i].set_xlabel(
-            f"{parameter_symbols[x_parameter]} ({parameter_units[x_parameter]})"
-        )
-        axs[i].set_ylabel(f"{variable_symbols[variable]} ({variable_units[variable]})")
-        # file_values = file_path_list_generator.file_values
-        # key = list(file_values[0].keys())[0]
-        # x = [item[key] for item in file_values]
-        if x_parameter == "b0":
-            file_values = file_path_list_generator.file_values
-            key = list(file_values[0].keys())[0]
-            x = [item[key] for item in file_values]
-        else:
-            x = averages_and_stds_dict[x_parameter + "_average"]
-        y = averages_and_stds_dict[variable + "_average"]
-        yerr = averages_and_stds_dict[variable + "_std"]
-        axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
-    plt.plot()
-
-
-def generate_fig_and_axes_ramping(
-    dataframes_list: list[DataFrame], variables: list[str], parameter_name: str
-):
-    nrows: int = len(dataframes_list)
+def generate_fig_and_axes_subsets(DataProcessor: DataProcessor, variables: list[str]):
+    nrows: int = len(DataProcessor.list_of_dataframes)
     ncols: int = len(variables)
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
-    # fig.suptitle(f"Ramping Plots", fontsize=10)
     return fig, axs
 
 
-def draw_ramping_all_ramps(
-    file_path_list_generator, x_parameter, dataframes_list, variables, axs, row_headers
+def draw_subsets_all_subsets(
+    DataProcessor: DataProcessor, variables: list[str], axs, temps=False
 ):
-    for i, dataframe in enumerate(dataframes_list):
+    if not temps:
+        x_parameter = DataProcessor.primary_x_parameter
+    else:
+        x_parameter = "temps"
+    for i, dataframe in enumerate(DataProcessor.list_of_dataframes):
         for j, variable in enumerate(variables):
             ax = axs[i, j]
             if variable_units[variable] != "":
@@ -168,138 +166,24 @@ def draw_ramping_all_ramps(
             x = dataframe[x_parameter]
             y = dataframe[variable].tolist()
             ax.plot(x, y, ".", color="black")
-        row_headers.append(
-            f"0MW to {list(file_path_list_generator.file_values[i].values())[0]}MW"
-        )
-
-
-def plot_ramping_all_ramps(
-    file_path_list_generator, x_parameter, dataframes_list, variables, temps=False
-):
-    fig, axs = generate_fig_and_axes_ramping(dataframes_list, variables, x_parameter)
-    row_headers = []
-    if temps:
-        draw_ramping_all_ramps(
-            file_path_list_generator,
-            "temps",
-            dataframes_list,
-            variables,
-            axs,
-            row_headers,
-        )
-    else:
-        draw_ramping_all_ramps(
-            file_path_list_generator,
-            x_parameter,
-            dataframes_list,
-            variables,
-            axs,
-            row_headers,
-        )
-    add_headers(fig, row_headers=row_headers)
     plt.plot()
 
 
-def add_headers(
-    fig,
-    *,
-    row_headers=None,
-    col_headers=None,
-    row_pad=1,
-    col_pad=5,
-    rotate_row_headers=True,
-    **text_kwargs,
+def plot_ramping_all_subsets(
+    DataProcessor: DataProcessor, variables: list[str], temps=False
 ):
-    """
-    Function to add row and column headers to a matplotlib figure.
-
-    Based on https://stackoverflow.com/a/25814386
-
-    Args:
-        fig (_type_): The figure which contains the axes to work on
-        row_headers (_type_, optional):  A sequence of strings to be row headers.
-            Defaults to None.
-        col_headers (_type_, optional): A sequence of strings to be column headers.
-            Defaults to None.
-        row_pad (int, optional): Value to adjust padding. Defaults to 1.
-        col_pad (int, optional): Value to adjust padding. Defaults to 5.
-        rotate_row_headers (bool, optional): Whether to rotate by 90° the row headers.
-            Defaults to True.
-        **text_kwargs: Forwarded to ax.annotate(...)
-    """
-
-    axes = fig.get_axes()
-
-    for ax in axes:
-        sbs = ax.get_subplotspec()
-
-        # Putting headers on cols
-        if (col_headers is not None) and sbs.is_first_row():
-            ax.annotate(
-                col_headers[sbs.colspan.start],
-                xy=(0.5, 1),
-                xytext=(0, col_pad),
-                xycoords="axes fraction",
-                textcoords="offset points",
-                ha="center",
-                va="baseline",
-                **text_kwargs,
-            )
-
-        # Putting headers on rows
-        if (row_headers is not None) and sbs.is_first_col():
-            ax.annotate(
-                row_headers[sbs.rowspan.start],
-                xy=(0, 0.5),
-                xytext=(-ax.yaxis.labelpad - row_pad, 0),
-                xycoords=ax.yaxis.label,
-                textcoords="offset points",
-                ha="right",
-                va="center",
-                rotation=rotate_row_headers * 90,
-                **text_kwargs,
-            )
+    fig, axs = generate_fig_and_axes_subsets(DataProcessor, variables)
+    if temps:
+        draw_subsets_all_subsets(DataProcessor, variables, axs, temps=True)
+    else:
+        draw_subsets_all_subsets(DataProcessor, variables, axs, temps=False)
 
 
-def plot_all(file_path_list_generators, dataframes_lists, variables):
-    for file_path_list_generator, dataframes_list in zip(
-        file_path_list_generators, dataframes_lists
-    ):
-        x_parameter = list(file_path_list_generator.file_values[0].keys())[0]
-        # print("x_parameter: ", x_parameter)
-        # print("file_path_list_generator.ramping: ", file_path_list_generator.ramping)
-        if not file_path_list_generator.ramping:
-            plot_averages(
-                file_path_list_generator, x_parameter, dataframes_list, variables
-            )
-        elif file_path_list_generator.ramping:
-            plot_ramping_all_ramps(
-                file_path_list_generator,
-                x_parameter,
-                dataframes_list,
-                variables,
-                temps=False,
-            )
-            plot_ramping_all_ramps(
-                file_path_list_generator,
-                x_parameter,
-                dataframes_list,
-                variables,
-                temps=True,
-            )
-        elif file_path_list_generator.ramping is None:
-            raise AttributeError(
-                "file_path_list_generator ramping attribute must exist (and be True or False)"
-            )
+def plot_all(DataProcessorList: list[DataProcessor], variables: list[str]):
+    for DataProcessor in DataProcessorList:
+        if DataProcessor.subsets:
+            plot_ramping_all_subsets(DataProcessor, variables, temps=False)
+            plot_ramping_all_subsets(DataProcessor, variables, temps=True)
         else:
-            raise ValueError(
-                "file_path_list_generator ramping attribute must be True or False"
-            )
-    # plt.show(block=False)
+            plot_averages(DataProcessor, variables)
     plt.show()
-
-
-# def get_files_from_folder(
-#     folder_path="EM1 Data/Misc Data to Plot", file_extension="*.mat"
-# ):
-#     file_paths = glob.glob(os.path.join(folder_path, file_extension))
