@@ -91,7 +91,7 @@ class DataProcessor:
         if chosen_subsubstructure is not None:
             mat_data = sio.loadmat(file_path)
             structure = mat_data[chosen_structure]
-            substructure = structure[chosen_substructure]
+            substructure = structure[chosen_substructure][0, 0]
             subsubstructure = substructure[chosen_subsubstructure][0, 0]
             array_data_dict = {}
             scalar_data_dict = {}

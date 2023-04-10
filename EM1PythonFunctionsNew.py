@@ -1,8 +1,17 @@
+from typing import Any, TypeVar
 from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from EM1PythonClasses import DataProcessor
-from EM1PythonDictionaries import parameter_meanings
+from EM1PythonDictionaries import (
+    parameter_meanings,
+    parameter_symbols,
+    parameter_units,
+    variable_meanings,
+    variable_symbols,
+    variable_units,
+)
+import numpy as np
 
 
 def plot_all(DataProcessor: DataProcessor, variables: list[str]) -> None:
@@ -16,14 +25,30 @@ def plot_averages(
 ) -> None:
     fig, axs = generate_fig_and_axs(DataProcessor, variables)
     means_stds = get_means_stds(DataProcessor, variables)
+    for i, variable in enumerate(variables):
+        axs[i].set_title(
+            f"{variable_meanings[variable]} vs. {parameter_symbols[DataProcessor.primary_x_parameter]}",
+            fontsize=10,
+        )
+        axs[i].set_xlabel(
+            f"{parameter_symbols[DataProcessor.primary_x_parameter]} ({parameter_units[DataProcessor.primary_x_parameter]})"
+        )
+        axs[i].set_ylabel(f"{variable_symbols[variable]} ({variable_units[variable]})")
+        x = means_stds[DataProcessor.primary_x_parameter + "_mean"]
+        y = means_stds[variable + "_mean"]
+        yerr = means_stds[variable + "_std"]
+        axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
+    plt.show()
 
 
 def generate_fig_and_axs(
     DataProcessor, variables: list[str]
 ) -> tuple[Figure, list[Axes]]:
-    nrows = 1
-    ncols: int = len(variables)
+    num_variables = len(variables)
     parameter_name = DataProcessor.primary_x_parameter
+    ncols: int = 4
+    nrows: int = (num_variables + ncols - 1) // ncols
+
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
     )
@@ -31,12 +56,14 @@ def generate_fig_and_axs(
         f"Averages vs. {parameter_meanings[parameter_name]}",
         fontsize=10,
     )
+    axs = axs.flatten()
     return fig, axs
-    # TODO Rework this function to make plots more readable and more robust using questions asked to ChatGPT
 
 
-def get_means_stds(DataProcessor: DataProcessor, variables: list[str]):
-    means_stds = {}
+def get_means_stds(
+    DataProcessor: DataProcessor, variables: list[str]
+) -> dict[Any, Any]:
+    means_stds: dict = {}
     for variable in variables:
         variable_means = [
             dataframe[variable].iloc[DataProcessor.start : DataProcessor.end].mean()
@@ -62,4 +89,4 @@ def get_means_stds(DataProcessor: DataProcessor, variables: list[str]):
         ]
         means_stds[DataProcessor.primary_x_parameter + "_mean"] = x_parameter_means
         means_stds[DataProcessor.primary_x_parameter + "_std"] = x_parameter_stds
-        return means_stds
+    return means_stds
