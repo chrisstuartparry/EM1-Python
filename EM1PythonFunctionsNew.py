@@ -1,4 +1,4 @@
-from typing import Any, TypeVar
+from typing import Any, Iterator, TypeVar
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -21,9 +21,9 @@ plt.rcParams["text.latex.preamble"] = "\n".join(
 )
 
 
-def plot_all(DataProcessor: DataProcessor, variables: list[str]) -> None:
-    if not DataProcessor.plot_raw:
-        plot_averages  # TODO Finish this function once dependencies are finished
+# def plot_all(DataProcessor: DataProcessor, variables: list[str]) -> None:
+#     if not DataProcessor.plot_raw:
+#         plot_averages  # TODO Finish this function once dependencies are finished
 
 
 def plot_averages(
@@ -77,7 +77,7 @@ def plot_averages(
     #     y = means_stds[variable + "_mean"]
     #     yerr = means_stds[variable + "_std"]
     #     axs[i].errorbar(x, y, yerr=yerr, fmt=".", color="black", elinewidth=0.5)
-    plt.show()
+    plt.plot()
 
 
 def generate_fig_and_axs(DataProcessor, variables: list[str]) -> tuple[Figure, Any]:
@@ -137,4 +137,58 @@ def generate_fig_and_axes_subsets(DataProcessor: DataProcessor, variables: list[
     )
     return fig, axs
 
-def draw_subsets_all_subsets()
+
+def draw_subsets_all_subsets(
+    DataProcessor: DataProcessor, variables: list[str], axs, temps=False
+):
+    if not temps:
+        x_parameter = DataProcessor.primary_x_parameter
+    else:
+        x_parameter = "temps"
+    for i, dataframe in enumerate(DataProcessor.list_of_dataframes):
+        for j, variable in enumerate(variables):
+            ax = axs[i, j]
+            if variable_units[variable] != "":
+                if i == 0:
+                    ax.set_title(
+                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
+                    )
+                ax.set_xlabel(
+                    f"{variable_symbols[x_parameter]} ({variable_units[x_parameter]})"
+                )
+                ax.set_ylabel(
+                    f"{variable_symbols[variable]} ({variable_units[variable]})"
+                )
+            else:
+                if i == 0:
+                    ax.set_title(
+                        f"{variable_meanings[variable]} against {variable_meanings[x_parameter]}"
+                    )
+                ax.set_xlabel(
+                    f"{variable_symbols[x_parameter]} ({variable_units[x_parameter]})"
+                )
+                ax.set_ylabel(f"{variable_symbols[variable]}")
+            x = dataframe[x_parameter]
+            y = dataframe[variable].tolist()
+            ax.plot(x, y, ".", color="black")
+    plt.plot()
+
+
+def plot_ramping_all_subsets(
+    DataProcessor: DataProcessor, variables: list[str], temps=False
+):
+    fig, axs = generate_fig_and_axes_subsets(DataProcessor, variables)
+    if temps:
+        draw_subsets_all_subsets(DataProcessor, variables, axs, temps=True)
+    else:
+        draw_subsets_all_subsets(DataProcessor, variables, axs, temps=False)
+
+
+def plot_all(DataProcessorList: list[DataProcessor], variables: list[str]):
+    for DataProcessor in DataProcessorList:
+        if DataProcessor.subsets:
+            plot_ramping_all_subsets(DataProcessor, variables, temps=False)
+            plot_ramping_all_subsets(DataProcessor, variables, temps=True)
+        else:
+            plot_averages(DataProcessor, variables)
+    plt.show()

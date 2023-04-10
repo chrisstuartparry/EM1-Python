@@ -11,6 +11,7 @@ variable_symbols = {
     "pnbi_th": r"$P_{\mathrm{NBI thermal}}$",
     "ip": r"$I_{\mathrm{plasma}}$",
     "betap": r"$\beta_{\mathrm{P}}$",
+    "nbar": r"$\bar{n}_e$",
     "ne0": r"$n_{e(0)}$",
     "ni0": r"$n_{i(0)}$",
     "nim": r"$n_{i(m)}$",

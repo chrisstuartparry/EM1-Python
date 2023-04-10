@@ -49,6 +49,7 @@ class DataProcessor:
         file_name_template: str,
         primary_x_parameter: str,
         plot_raw: bool = False,
+        subsets: bool = False,
     ) -> None:
         self.base_path = base_path
         self.file_name_template = file_name_template
@@ -58,6 +59,7 @@ class DataProcessor:
         self.list_of_files_via_glob: list[str] = self.get_files_list()
         self.list_of_dataframes: list[DataFrame] = self.generate_dataframes_list()
         self.plot_raw = plot_raw
+        self.subsets = subsets
 
     def get_files_list(self) -> list[str]:
         glob_file_path = os.path.join(self.base_path, self.glob_file_name_template)
