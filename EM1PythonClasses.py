@@ -97,9 +97,13 @@ class DataProcessor:
         file_dataframe: DataFrame = self.mat_to_DataFrame(file_path)
         file_dataframe = file_dataframe.filter(items=variables_list)
         file_dataframe["tim"] = file_dataframe["tite"] * file_dataframe["tem"]
-        file_dataframe["nTtau"] = (
+        file_dataframe["nimtimtaue"] = (
             file_dataframe["nim"] * file_dataframe["tim"] * file_dataframe["taue"]
         )
+        file_dataframe["ne0te0taue"] = (
+            file_dataframe["ne0"] * file_dataframe["te0"] * file_dataframe["taue"]
+        )
+        file_dataframe["nTtau"] = file_dataframe["nimtimtaue"]
         dataframe_for_b0: DataFrame = self.mat_to_DataFrame(
             file_path,
             chosen_structure="post",

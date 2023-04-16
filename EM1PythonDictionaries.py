@@ -23,6 +23,7 @@ variable_symbols = {
     "sext": r"$S_{\mathrm{ext}}$",
     "vp": r"$V_{\mathrm{p}}$",
     "W": r"$E_{\mathrm{p}}$",
+    "ne0te0taue": r"$n_{e(0)}T_{e(0)}\tau_E$",  # This is a custom variable
     "ni0titetaue": r"$n_{i(0)}\frac{T_i}{T_e}\tau_E$",  # This is a custom variable
     "nimtimtaue": r"$n_{i(m)}T_{i(m)}\tau_E$",  # This is a custom variable
     "nTtau": r"$\bar{n}_i \bar{T}_i \tau_E$",  # This is a custom variable
@@ -53,7 +54,8 @@ variable_meanings = {
     "sext": "External plasma surface",
     "vp": "Plasma volume",
     "W": "Total plasma energy",
-    "ni0titetaue": "Old triple Product",  # This is a custom variable
+    "ne0te0taue": "Triple product",
+    "ni0titetaue": "Old triple product",  # This is a custom variable
     "nimtimtaue": "Triple product",  # This is a custom variable
     "nTtau": "Triple product",  # This is a custom variable
 }
@@ -83,6 +85,7 @@ variable_units = {
     "sext": r"\unit{\metre\squared}",
     "vp": r"\unit{\metre\cubed}",
     "W": r"\unit{\joule}",
+    "ne0te0taue": r"\unit{\electronvolt\second\per\metre\cubed}",
     "ni0titetaue": r"\unit{\second\per\metre\cubed}",  # This is a custom variable
     "nimtimtaue": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable
     "nTtau": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable

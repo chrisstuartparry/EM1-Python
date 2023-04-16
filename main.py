@@ -43,20 +43,20 @@ DataProcessors = [
     ramping_class_default,
 ]
 
-variables = [
-    "nTtau",
-    "ni0",
-    "taue",
-    "nbar",
-    "ni0",
-    "nim",
-    "ne0",
-    "te0",
-    "tem",
-    "tite",
-    "tim",
-    "modeh",
-]
+# variables = [
+#     "nTtau",
+#     "ni0",
+#     "taue",
+#     "nbar",
+#     "ni0",
+#     "nim",
+#     "ne0",
+#     "te0",
+#     "tem",
+#     "tite",
+#     "tim",
+#     "modeh",
+# ]
 # variables = ["nbar", "ni0", "nim", "ne0"]
 # variables = [
 #     "te0",
@@ -64,6 +64,7 @@ variables = [
 #     "tite",
 #     "tim",
 # ]
+variables = ["ne0", "te0", "taue", "ne0te0taue", "nim", "tim", "taue", "nimtimtaue"]
 
 #  Plot the data
 plot_all(DataProcessors, variables)
