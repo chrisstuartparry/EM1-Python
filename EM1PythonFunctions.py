@@ -81,7 +81,7 @@ def generate_fig_and_axs(DataProcessor, variables: list[str]) -> tuple[Figure, A
     fig: Figure
     axs: Any
     fig, axs = plt.subplots(
-        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
+        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True, squeeze=False
     )
     fig.suptitle(
         f"Averages vs. {parameter_meanings[parameter_name]}",
