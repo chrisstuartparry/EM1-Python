@@ -132,7 +132,7 @@ def generate_fig_and_axes_subsets(DataProcessor: DataProcessor, variables: list[
 
 
 def draw_subsets_all_subsets(
-    DataProcessor: DataProcessor, variables: list[str], axs, temps=False
+    DataProcessor: DataProcessor, variables: list[str], axs, row_headers, temps=False
 ):
     if not temps:
         x_parameter = DataProcessor.primary_x_parameter
@@ -164,6 +164,7 @@ def draw_subsets_all_subsets(
             x = dataframe[x_parameter]
             y = dataframe[variable].tolist()
             ax.plot(x, y, ".", color="black")
+        row_headers.append(f"0MW to {DataProcessor.get_matched_elements()[1][i]}MW")
     plt.plot()
 
 
@@ -171,10 +172,74 @@ def plot_ramping_all_subsets(
     DataProcessor: DataProcessor, variables: list[str], temps=False
 ):
     fig, axs = generate_fig_and_axes_subsets(DataProcessor, variables)
+    row_headers: list = []
     if temps:
-        draw_subsets_all_subsets(DataProcessor, variables, axs, temps=True)
+        draw_subsets_all_subsets(DataProcessor, variables, axs, row_headers, temps=True)
     else:
-        draw_subsets_all_subsets(DataProcessor, variables, axs, temps=False)
+        draw_subsets_all_subsets(
+            DataProcessor, variables, axs, row_headers, temps=False
+        )
+    add_headers(fig, row_headers=row_headers)
+    plt.plot()
+
+
+def add_headers(
+    fig,
+    *,
+    row_headers=None,
+    col_headers=None,
+    row_pad=1,
+    col_pad=5,
+    rotate_row_headers=True,
+    **text_kwargs,
+):
+    """
+    Function to add row and column headers to a matplotlib figure.
+    Based on https://stackoverflow.com/a/25814386
+    Args:
+        fig (_type_): The figure which contains the axes to work on
+        row_headers (_type_, optional):  A sequence of strings to be row headers.
+            Defaults to None.
+        col_headers (_type_, optional): A sequence of strings to be column headers.
+            Defaults to None.
+        row_pad (int, optional): Value to adjust padding. Defaults to 1.
+        col_pad (int, optional): Value to adjust padding. Defaults to 5.
+        rotate_row_headers (bool, optional): Whether to rotate by 90° the row headers.
+            Defaults to True.
+        **text_kwargs: Forwarded to ax.annotate(...)
+    """
+
+    axes = fig.get_axes()
+
+    for ax in axes:
+        sbs = ax.get_subplotspec()
+
+        # Putting headers on cols
+        if (col_headers is not None) and sbs.is_first_row():
+            ax.annotate(
+                col_headers[sbs.colspan.start],
+                xy=(0.5, 1),
+                xytext=(0, col_pad),
+                xycoords="axes fraction",
+                textcoords="offset points",
+                ha="center",
+                va="baseline",
+                **text_kwargs,
+            )
+
+        # Putting headers on rows
+        if (row_headers is not None) and sbs.is_first_col():
+            ax.annotate(
+                row_headers[sbs.rowspan.start],
+                xy=(0, 0.5),
+                xytext=(-ax.yaxis.labelpad - row_pad, 0),
+                xycoords=ax.yaxis.label,
+                textcoords="offset points",
+                ha="right",
+                va="center",
+                rotation=rotate_row_headers * 90,
+                **text_kwargs,
+            )
 
 
 def plot_all(DataProcessorList: list[DataProcessor], variables: list[str]):
