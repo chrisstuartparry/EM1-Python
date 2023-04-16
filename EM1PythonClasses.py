@@ -40,6 +40,16 @@ class DataProcessor:
         )
         return list_of_files_via_glob
 
+    def get_matched_elements(self) -> tuple[list[float], list[int]]:
+        regex_pattern = self.file_name_template.format(r"(\d+(\.\d+)?)")
+        matched_elements = [
+            float(match.group(1))
+            for file in self.list_of_files_via_glob
+            if (match := re.search(regex_pattern, file))
+        ]
+        matched_elements_int = [int(element) for element in matched_elements]
+        return matched_elements, matched_elements_int
+
     def generate_x_parameter_list(self) -> list[dict[str, float]]:
         files_list: list[str] = self.get_files_list()
         regex_pattern = self.file_name_template.format(r"(\d+(\.\d+)?)")
@@ -103,7 +113,7 @@ class DataProcessor:
         file_dataframe["ne0te0taue"] = (
             file_dataframe["ne0"] * file_dataframe["te0"] * file_dataframe["taue"]
         )
-        file_dataframe["nTtau"] = file_dataframe["nimtimtaue"]
+        file_dataframe["nTtau"] = file_dataframe["ne0te0taue"]
         dataframe_for_b0: DataFrame = self.mat_to_DataFrame(
             file_path,
             chosen_structure="post",
