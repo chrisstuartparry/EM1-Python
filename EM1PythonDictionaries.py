@@ -18,6 +18,7 @@ variable_symbols = {
     "te0": r"$T_{e(0)}$",
     "tem": r"$\bar{T}_e$",
     "tite": r"$\frac{T_i}{T_e}$",
+    "tim": "$T_{i(m)}$",
     "pfus": r"$P_{\mathrm{fusion}}$",
     "sext": r"$S_{\mathrm{ext}}$",
     "vp": r"$V_{\mathrm{p}}$",
@@ -28,32 +29,33 @@ variable_symbols = {
 }
 
 variable_meanings = {
-    "taue": "Energy Confinement Time",
-    "betan": "Normalised Plasma Beta",
-    "modeh": "Confinement Mode [L=0, H=1]",
-    "qeff": "Effective Safety Factor",
-    "q0": "Central Safety Factor",
-    "q95": "Safety Factor at 95%%",
+    "taue": "Energy confinement time",
+    "betan": "Normalised plasma beta",
+    "modeh": "Confinement mode [L=0, H=1]",
+    "qeff": "Effective safety factor",
+    "q0": "Central safety factor",
+    "q95": "Safety factor at 95%%",
     "temps": "Time",
     "pnbi": "NBI",
     "frnbi": "Frac. NBI absorbed in plasma",
-    "pnbi_th": "NBI Therm. Power Deposit.",
-    "ip:": "Plasma Current",
-    "betap": "Poloidal Beta",
-    "nbar": "Line averaged plasma electron density",
+    "pnbi_th": "NBI Therm. power deposit.",
+    "ip:": "Plasma current",
+    "betap": "Poloidal beta",
+    "nbar": "Line avg. plasma electron density",
     "ne0": "Central electron density",
     "ni0": "Central ion density",
-    "nim": "Sum of V.Avg. Ion Densities",
+    "nim": "Sum of V.avg. ion densities",
     "te0": "Central electron temp.",
-    "tite": "Ratio of ion to e- temp.",
+    "tite": "Ratio of ion to e- temp. (V.avg.)",
+    "tim": "Volume avg. ion temp.",
     "tem": "Volume avg. e- temp.",
-    "pfus": "Alpha D-T Fusion Power",
-    "sext": "External Plasma Surface",
-    "vp": "Plasma Volume",
-    "W": "Total Plasma Energy",
-    "ni0titetaue": "Old Triple Product",  # This is a custom variable
-    "nimtimtaue": "Triple Product",  # This is a custom variable
-    "nTtau": "Triple Product",  # This is a custom variable
+    "pfus": "Alpha D-T fusion power",
+    "sext": "External plasma surface",
+    "vp": "Plasma volume",
+    "W": "Total plasma energy",
+    "ni0titetaue": "Old triple Product",  # This is a custom variable
+    "nimtimtaue": "Triple product",  # This is a custom variable
+    "nTtau": "Triple product",  # This is a custom variable
 }
 
 variable_units = {
@@ -75,6 +77,7 @@ variable_units = {
     "nim": r"\unit{\per\metre\cubed}",
     "te0": r"\unit{\electronvolt}",
     "tite": "",
+    "tim": r"\unit{\electronvolt}",
     "tem": r"\unit{\electronvolt}",
     "pfus": r"\unit{\watt}",
     "sext": r"\unit{\metre\squared}",
@@ -121,7 +124,7 @@ parameter_units = {
     "ip": r"\unit{\ampere}",
     "nbar": r"\unit{\per\metre\cubed}",
     "nim": r"\unit{\per\metre\cubed}",
-    "pnbi": r"\unit{\mega\watt}",
+    "pnbi": r"\unit{\watt}",
 }
 
 respective_variable_for_dataframe = {
