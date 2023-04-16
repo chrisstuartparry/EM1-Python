@@ -43,5 +43,27 @@ DataProcessors = [
     ramping_class_default,
 ]
 
+variables = [
+    "nTtau",
+    "ni0",
+    "taue",
+    "nbar",
+    "ni0",
+    "nim",
+    "ne0",
+    "te0",
+    "tem",
+    "tite",
+    "tim",
+    "modeh",
+]
+# variables = ["nbar", "ni0", "nim", "ne0"]
+# variables = [
+#     "te0",
+#     "tem",
+#     "tite",
+#     "tim",
+# ]
+
 #  Plot the data
-plot_all(DataProcessors, ["nTtau", "ni0", "taue", "tite", "tem", "pnbi"])
+plot_all(DataProcessors, variables)
