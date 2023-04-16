@@ -38,11 +38,11 @@ variable_meanings = {
     "q95": "Safety factor at 95%%",
     "temps": "Time",
     "pnbi": "NBI",
-    "frnbi": "Frac. NBI absorbed in plasma",
+    "frnbi": "Fraction of NBI absorbed",
     "pnbi_th": "NBI Therm. power deposit.",
     "ip:": "Plasma current",
     "betap": "Poloidal beta",
-    "nbar": "Line avg. plasma electron density",
+    "nbar": "Line avg. electron density",
     "ne0": "Central electron density",
     "ni0": "Central ion density",
     "nim": "Sum of V.avg. ion densities",
@@ -103,7 +103,7 @@ parameter_symbols = {
     "R0": r"$R_0$",  # Major Radius of Plasma
     "z0": r"$Z_0$",  # Height of Plasma
     "ip": r"$I_{\mathrm{plasma}}$",
-    "nbar": r"$\bar{N}$",
+    "nbar": r"$\bar{n}$",
     "nim": r"$N_{i(m)}$",
     "pnbi": r"$P_{\mathrm{NBI}}$",
 }
@@ -114,7 +114,7 @@ parameter_meanings = {
     "R0": "Major Radius of Plasma",
     "z0": "Height of Plasma",
     "ip": "Plasma Current",
-    "nbar": "Line averaged electron density",
+    "nbar": "Line avg. electron density",
     "nim": "Sum of V.Avg. Ion Densities",
     "pnbi": "NBI Power",
 }
