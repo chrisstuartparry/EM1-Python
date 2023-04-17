@@ -64,7 +64,8 @@ DataProcessors = [
 #     "tite",
 #     "tim",
 # ]
-variables = ["ne0", "te0", "taue", "ne0te0taue", "nim", "tim", "taue", "nimtimtaue"]
+# variables = ["ne0", "te0", "taue", "ne0te0taue", "nim", "tim", "taue", "nimtimtaue"]
+variables = ["ne0", "te0", "taue", "ne0te0taue"]
 
 #  Plot the data
 plot_all(DataProcessors, variables)
