@@ -86,9 +86,9 @@ variable_units = {
     "vp": r"\unit{\metre\cubed}",
     "W": r"\unit{\joule}",
     "ne0te0taue": r"\unit{\electronvolt\second\per\metre\cubed}",
-    "ni0titetaue": r"\unit{\second\per\metre\cubed}",  # This is a custom variable
-    "nimtimtaue": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable
-    "nTtau": r"\unit{\electronvolt\second\per\metre\cubed}",  # This is a custom variable
+    "ni0titetaue": r"\unit{\second\per\metre\cubed}",  # Custom
+    "nimtimtaue": r"\unit{\electronvolt\second\per\metre\cubed}",  # Custom
+    "nTtau": r"\unit{\electronvolt\second\per\metre\cubed}",  # Custom
 }
 
 variable_yticks = {

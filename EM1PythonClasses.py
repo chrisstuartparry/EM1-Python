@@ -43,7 +43,7 @@ class DataProcessor:
     def get_matched_elements(self) -> tuple[list[float], list[int]]:
         regex_pattern = self.file_name_template.format(r"(\d+(\.\d+)?)")
         matched_elements = [
-            float(match.group(1))
+            float(match[1])
             for file in self.list_of_files_via_glob
             if (match := re.search(regex_pattern, file))
         ]
@@ -51,6 +51,7 @@ class DataProcessor:
         return matched_elements, matched_elements_int
 
     def generate_x_parameter_list(self) -> list[dict[str, float]]:
+        # sourcery skip: inline-immediately-returned-variable, use-getitem-for-re-match-groups  # noqa: E501
         files_list: list[str] = self.get_files_list()
         regex_pattern = self.file_name_template.format(r"(\d+(\.\d+)?)")
 
@@ -68,13 +69,13 @@ class DataProcessor:
         chosen_substructure="zerod",
         chosen_subsubstructure=None,
     ) -> DataFrame:
+        array_data_dict = {}
+        scalar_data_dict = {}
         if chosen_subsubstructure is not None:
-            mat_data = sio.loadmat(file_path)
-            structure = mat_data[chosen_structure]
-            substructure = structure[chosen_substructure][0, 0]
+            substructure = self.get_substructure(
+                file_path, chosen_structure, chosen_substructure
+            )
             subsubstructure = substructure[chosen_subsubstructure][0, 0]
-            array_data_dict = {}
-            scalar_data_dict = {}
             for field_name in subsubstructure.dtype.names:
                 field_data = subsubstructure[field_name][0, 0]
                 if field_data.size == 1:
@@ -82,14 +83,9 @@ class DataProcessor:
                 else:
                     array_data_dict[field_name] = field_data.squeeze()
         else:
-            mat_data = sio.loadmat(file_path)
-            structure = mat_data[chosen_structure]
-            substructure = structure[chosen_substructure][0, 0]
-
-            # Create a dictionary of the field names & data, one for arrays and one for scalars
-
-            array_data_dict = {}
-            scalar_data_dict = {}
+            substructure = self.get_substructure(
+                file_path, chosen_structure, chosen_substructure
+            )
             for field_name in substructure.dtype.names:
                 field_data = substructure[field_name][0, 0]
                 if field_data.size == 1:
@@ -97,11 +93,12 @@ class DataProcessor:
                 else:
                     array_data_dict[field_name] = field_data.squeeze()
 
-        # Convert the array dictionary to a DataFrame, and the scalar data to a Series
-        df = pd.DataFrame(array_data_dict)
-        # series = pd.Series(scalar_data_dict)
+        return pd.DataFrame(array_data_dict)
 
-        return df
+    def get_substructure(self, file_path, chosen_structure, chosen_substructure):
+        mat_data = sio.loadmat(file_path)
+        structure = mat_data[chosen_structure]
+        return structure[chosen_substructure][0, 0]
 
     def load_data_into_dataframe(self, file_path) -> DataFrame:
         file_dataframe: DataFrame = self.mat_to_DataFrame(file_path)
