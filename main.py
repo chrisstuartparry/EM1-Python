@@ -1,7 +1,7 @@
-from EM1PythonFunctions import plot_all
 from EM1PythonClasses import DataProcessor
+from EM1PythonFunctions import plot_all
 
-# Define the DataProcessors below according to their folder path, file name template, and primary x parameter
+# Define the DataProcessors below
 
 pnbi_class_default = DataProcessor(
     base_path="EM1 Data/3rd Run Data (fast mode)",
@@ -27,6 +27,13 @@ nbar_class_2MW = DataProcessor(
     primary_x_parameter="nbar",
 )
 
+maximising_pnbi_class = DataProcessor(
+    base_path="EM1 Data/9th Run Data (fast mode)",
+    file_name_template="NBI Power 2MW Max {}.mat",
+    primary_x_parameter="temps",
+    subsets=True,
+)
+
 ramping_class_default = DataProcessor(
     base_path="EM1 Data/8th Run Data (fast mode)",
     file_name_template=("NBI Ramping 0 to {}MW.mat"),
@@ -41,6 +48,7 @@ DataProcessors = [
     ip_class_2MW,
     nbar_class_2MW,
     ramping_class_default,
+    maximising_pnbi_class,
 ]
 
 # variables = [
@@ -65,7 +73,10 @@ DataProcessors = [
 #     "tim",
 # ]
 # variables = ["ne0", "te0", "taue", "ne0te0taue", "nim", "tim", "taue", "nimtimtaue"]
-variables = ["ne0", "te0", "taue", "ne0te0taue"]
+# variables = ["ne0", "te0", "taue", "ne0te0taue"]
+# variables = ["ne0"]
+# variables = ["taue"]
+variables = ["ne0te0taue"]
 
 #  Plot the data
 plot_all(DataProcessors, variables)

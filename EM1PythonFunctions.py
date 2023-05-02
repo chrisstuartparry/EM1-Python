@@ -1,6 +1,8 @@
 from typing import Any
+
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
+
 from EM1PythonClasses import DataProcessor
 from EM1PythonDictionaries import (
     parameter_meanings,
@@ -75,18 +77,18 @@ def plot_averages(
 
 def generate_fig_and_axs(DataProcessor, variables: list[str]) -> tuple[Figure, Any]:
     num_variables = len(variables)
-    parameter_name = DataProcessor.primary_x_parameter
-    ncols: int = 4
-    nrows: int = (num_variables + ncols - 1) // ncols
+    # parameter_name = DataProcessor.primary_x_parameter
+    ncols: int = 4 if num_variables > 4 else num_variables
+    nrows: int = (num_variables + ncols - 1) // ncols if num_variables > 4 else 1
     fig: Figure
     axs: Any
     fig, axs = plt.subplots(
         nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True, squeeze=False
     )
-    fig.suptitle(
-        f"Averages vs. {parameter_meanings[parameter_name]}",
-        fontsize=10,
-    )
+    # fig.suptitle(
+    #     f"Averages vs. {parameter_meanings[parameter_name]}",
+    #     fontsize=10,
+    # )
     return fig, axs
 
 
@@ -126,7 +128,7 @@ def generate_fig_and_axes_subsets(DataProcessor: DataProcessor, variables: list[
     nrows: int = len(DataProcessor.list_of_dataframes)
     ncols: int = len(variables)
     fig, axs = plt.subplots(
-        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True
+        nrows, ncols, figsize=(15, 5 * nrows), constrained_layout=True, squeeze=False
     )
     return fig, axs
 

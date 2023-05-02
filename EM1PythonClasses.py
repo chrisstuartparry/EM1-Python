@@ -97,7 +97,7 @@ class DataProcessor:
                 else:
                     array_data_dict[field_name] = field_data.squeeze()
 
-        # Convert the array dictionary to a pandas DataFrame, and the scalar data to a pandas Series
+        # Convert the array dictionary to a DataFrame, and the scalar data to a Series
         df = pd.DataFrame(array_data_dict)
         # series = pd.Series(scalar_data_dict)
 
