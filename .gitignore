@@ -4,3 +4,5 @@ __pycache__
 profile.html
 profile.json
 .pytest_cache
+.venv
+.vscode
