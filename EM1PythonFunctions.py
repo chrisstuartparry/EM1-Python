@@ -125,8 +125,8 @@ def generate_fig_and_axes_subsets(DataProcessor: DataProcessor, variables: list[
 
 def draw_subsets_all_subsets(
     DataProcessor: DataProcessor, variables: list[str], axs, row_headers, temps=False
-):
-    x_parameter = "temps" if temps else DataProcessor.primary_x_parameter
+) -> None:
+    x_parameter: str = "temps" if temps else DataProcessor.primary_x_parameter
     for i, dataframe in enumerate(DataProcessor.list_of_dataframes):
         for j, variable in enumerate(variables):
             ax = axs[i, j]
